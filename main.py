@@ -1,9 +1,25 @@
 #!/usr/bin/env python
-import webapp2
+import datetime
+import jinja2
+import os
 import urllib
+import webapp2
 
+from google.appengine.api import users
 from google.appengine.ext import blobstore
+from google.appengine.ext import db
 from google.appengine.ext.webapp import blobstore_handlers
+
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
+
+class Level(db.Model):
+	uid = db.IntegerProperty(required = True)
+	level_name = db.StringProperty(required = True)
+	live_level_data = db.TextProperty()
+	draft_level_data = db.TextProperty()
+	created = db.DateTimeProperty(auto_now_add = True)
+	modified = db.DateTimeProperty(auto_now_add = True)
 
 class MainHand(webapp2.RequestHandler):
 	def write(self, *a, **kw):
@@ -20,22 +36,29 @@ class FrontHand(MainHand):
 	def get(self):
 		self.write('Herro world! :)')
 
-class LevelULHand(blobstore_handlers.BlobstoreUploadHandler, MainHand):
+class LevelULHand(MainHand):
 	def post(self):
-		output = self.request.get("filestr")
-		self.write(output)
-		"""upload_files = self.get_uploads('file') #'file' is file upload field in the form
-		if len(upload_files) <= 0:
-			self.write('No file was attached.')
+		uid_str = self.request.get('user_id')
+		level_name = self.request.get('level_name')
+		live_level_data = self.request.get('live_level_data')
+		draft_level_data = self.request.get('draft_level_data')
+		
+		uid = int(uid_str) #need to check if non-int is input later
+		
+		if uid and level_name:
+			new_level = Level(uid = uid, level_name = level_name, live_level_data = live_level_data, draft_level_data = draft_level_data)
+			new_level.put()
+			self.write('Level saved to server successfully!')
 		else:
-			blob_info = upload_files[0]
-			self.redirect('/api/levels/%s' % blob_info.key())"""
+			self.write('Missing required properties: uid or level_name');
 
-class LevelDLHand(blobstore_handlers.BlobstoreDownloadHandler):
+class LevelDLHand(MainHand):
 	def get(self, resource):
-		resource = str(urllib.unquote(resource))
-		blob_info = blobstore.BlobInfo.get(resource)
-		self.send_blob(blob_info)
+		beginning_path_len = 12
+		total_path_len = len(self.request.path)
+		lid = int(self.request.path[beginning_path_len:total_path_len])
+		query = Level.get_by_id(lid)
+		self.write(query.live_level_data)
 
 class UploadPageTestHand(MainHand):
 	def get(self):
