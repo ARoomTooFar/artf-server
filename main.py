@@ -1,19 +1,4 @@
 #!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 import webapp2
 import urllib
 
@@ -36,13 +21,15 @@ class FrontHand(MainHand):
 		self.write('Herro world! :)')
 
 class LevelULHand(blobstore_handlers.BlobstoreUploadHandler, MainHand):
-	def get(self):
-		self.write('It\'s a secret to everybody. ;)')
-
 	def post(self):
-		upload_files = self.get_uploads('file') #'file' is file upload field in the form
-		blob_info = upload_files[0]
-		self.redirect('/api/levels/%s' % blob_info.key())
+		output = self.request.get("filestr")
+		self.write(output)
+		"""upload_files = self.get_uploads('file') #'file' is file upload field in the form
+		if len(upload_files) <= 0:
+			self.write('No file was attached.')
+		else:
+			blob_info = upload_files[0]
+			self.redirect('/api/levels/%s' % blob_info.key())"""
 
 class LevelDLHand(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, resource):
