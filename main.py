@@ -6,9 +6,7 @@ import urllib
 import webapp2
 
 from google.appengine.api import users
-from google.appengine.ext import blobstore
 from google.appengine.ext import db
-from google.appengine.ext.webapp import blobstore_handlers
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
@@ -34,7 +32,7 @@ class MainHand(webapp2.RequestHandler):
 
 class FrontHand(MainHand):
 	def get(self):
-		self.write('Herro world! :)')
+		self.write('<html><head><title>ARTF Game Server</title></head><body>ARTF Game Server 0.0.1</body></html>')
 
 class LevelULHand(MainHand):
 	def post(self):
@@ -54,7 +52,7 @@ class LevelULHand(MainHand):
 
 class LevelDLHand(MainHand):
 	def get(self, resource):
-		beginning_path_len = 12
+		beginning_path_len = 12 #the length of the string '/api/levels/'
 		total_path_len = len(self.request.path)
 		lid = int(self.request.path[beginning_path_len:total_path_len])
 		query = Level.get_by_id(lid)
@@ -62,7 +60,6 @@ class LevelDLHand(MainHand):
 
 class UploadPageTestHand(MainHand):
 	def get(self):
-		upload_url = blobstore.create_upload_url('/api/levels')
 		self.write('<html><head><title>Upload Test</title></head><body>')
 		self.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
 		self.write('Upload File: <input type="file" name="file"><br> <input type="submit name="submit" value="Submit"> </form></body></html>')
