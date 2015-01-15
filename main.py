@@ -64,9 +64,14 @@ class UploadPageTestHand(MainHand):
 		self.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
 		self.write('Upload File: <input type="file" name="file"><br> <input type="submit name="submit" value="Submit"> </form></body></html>')
 
+class TemplateTestHand(MainHand):
+	def get(self):
+		self.render('test.html')
+
 app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/api/levels/?', LevelULHand),
     ('/api/levels/([^/]+)?', LevelDLHand),
-    ('/upload-page-test', UploadPageTestHand)
+    ('/upload-page-test', UploadPageTestHand),
+    ('/template-test', TemplateTestHand)
 ], debug=True)
