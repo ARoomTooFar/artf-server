@@ -46,9 +46,9 @@ class LevelULHand(MainHand):
 		if uid and level_name:
 			new_level = Level(uid = uid, level_name = level_name, live_level_data = live_level_data, draft_level_data = draft_level_data)
 			new_level.put()
-			self.write('Level saved to server successfully!')
+			self.write(new_level.key().id())
 		else:
-			self.write('Missing required properties: uid or level_name');
+			self.write('ERROR: Missing required properties: uid or level_name');
 
 class LevelDLHand(MainHand):
 	def get(self, resource):
