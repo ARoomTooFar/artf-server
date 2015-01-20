@@ -56,7 +56,10 @@ class LevelDLHand(MainHand):
 		total_path_len = len(self.request.path)
 		lid = int(self.request.path[beginning_path_len:total_path_len])
 		query = Level.get_by_id(lid)
-		self.write(query.live_level_data)
+		if(query == None):
+			self.write("ERROR: Level does not exist")
+		else:
+			self.write(query.live_level_data)
 
 class UploadPageTestHand(MainHand):
 	def get(self):
