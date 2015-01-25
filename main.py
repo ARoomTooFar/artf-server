@@ -57,7 +57,7 @@ class LevelDLHand(MainHand):
 		lid = int(self.request.path[beginning_path_len:total_path_len])
 		query = Level.get_by_id(lid)
 		if(query == None):
-			self.write("ERROR: Level does not exist")
+			self.abort(404)
 		else:
 			self.write(query.live_level_data)
 
