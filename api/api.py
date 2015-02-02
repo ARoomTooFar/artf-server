@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 import datetime
+import jinja2
+import os
 import webapp2
 
 from google.appengine.ext import db
-from google.appengine.api import users
+
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
 
 class Level(db.Model):
 	uid = db.IntegerProperty(required = True)
@@ -55,8 +59,15 @@ class LevelDLHand(MainHand):
 		else:
 			self.write(query.live_level_data)
 
+class DSConnHand(MainHand):
+	def get(self):
+		query = Level.all()
+		levels = list(query)
+		self.render('dsconn.html', levels = levels)
+
 app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/api/levels/?', LevelULHand),
-    ('/api/levels/([^/]+)?', LevelDLHand)
+    ('/api/levels/([^/]+)?', LevelDLHand),
+    ('/dsconn', DSConnHand)
 ], debug=True)

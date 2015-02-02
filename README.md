@@ -1,2 +1,2 @@
-artf-game-server
+artf-server
 ================

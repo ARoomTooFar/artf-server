@@ -1,1 +1,33 @@
-Successuuu
+<html>
+<head>
+	<title>ARTF Web: Display Data</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>level ID</th>
+                <th>created</th>
+                <th>draft_level_data</th>
+                <th>level_name</th>
+                <th>live_level_data</th>
+                <th>modified</th>
+                <th>user ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for level in levels %}
+            <tr>
+                <td>{{level.key().id()}}</td>
+                <td>{{level.created}}</td>
+                <td>{{level.draft_level_data}}</td>
+                <td>{{level.name}}</td>
+                <td>{{level.live_level_data}}</td>
+                <td>{{level.modified}}</td>
+                <td>{{level.uid}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
