@@ -32,7 +32,7 @@ class MainHand(webapp2.RequestHandler):
 
 class FrontHand(MainHand):
 	def get(self):
-		self.write('<html><head><title>ARTF Game Server</title></head><body>ARTF Game Server 0.0.1</body></html>')
+		self.write('<html><head><title>ARTF Game Server</title></head><body>ARTF Game Server 0.0.2</body></html>')
 
 class LevelULHand(MainHand):
 	def post(self):

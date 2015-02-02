@@ -1,5 +1,5 @@
-application: artf-gs
-version: 0-0-1
+application: artf-server
+version: 0-0-2
 runtime: python27
 api_version: 1
 threadsafe: yes
