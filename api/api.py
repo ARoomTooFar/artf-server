@@ -71,21 +71,24 @@ class LevelsIdHand(MainHand):
 		if(query == None):
 			logging.error('Level does not exist')
 			self.abort(404)
-
-		if(flag == 'update'):
-			if(uid_str != ''):
-				query.uid = int(uid_str)
-			if(level_name != ''):
-				query.level_name = level_name
-			if(live_level_data != ''):
-				query.live_level_data = live_level_data
-			if(draft_level_data != ''):
-				query.draft_level_data = draft_level_data
-			query.put()
-			self.write(query.key().id())
 		else:
-			logging.error('No flag set')
-			self.abort(404)
+			if(flag == 'update'):
+				if(uid_str != ''):
+					query.uid = int(uid_str)
+				if(level_name != ''):
+					query.level_name = level_name
+				if(live_level_data != ''):
+					query.live_level_data = live_level_data
+				if(draft_level_data != ''):
+					query.draft_level_data = draft_level_data
+				query.put()
+				self.write(query.key().id())
+			elif(flag == 'delete'):
+				query.delete()
+				self.write(query.key().id())
+			else:
+				logging.error('No flag set')
+				self.abort(404)
 
 class DSConnHand(MainHand):
 	def get(self):
