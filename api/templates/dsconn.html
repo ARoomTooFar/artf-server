@@ -3,8 +3,11 @@
     <title>ARTF API: Datastore Connect Check</title>
 </head>
 <body>
-    {% for level in levels %}
-    <p>{{level.live_level_data}}</p>
-    {% endfor %}
+	<h1>Level IDs</h1>
+	<ul>
+    	{% for level in levels %}
+    	<li>{{level.key().id()}}</li>
+    	{% endfor %}
+	</ul>
 </body>
 </html>

@@ -1,21 +1,14 @@
 #!/usr/bin/env python
 import datetime
 import jinja2
+import logging
 import os
 import webapp2
 
-from google.appengine.ext import db
+from models import Level
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
-
-class Level(db.Model):
-	uid = db.IntegerProperty(required = True)
-	level_name = db.StringProperty(required = True)
-	live_level_data = db.TextProperty()
-	draft_level_data = db.TextProperty()
-	created = db.DateTimeProperty(auto_now_add = True)
-	modified = db.DateTimeProperty(auto_now_add = True)
 
 class MainHand(webapp2.RequestHandler):
 	def write(self, *a, **kw):
@@ -32,7 +25,7 @@ class FrontHand(MainHand):
 	def get(self):
 		self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.2</body></html>')
 
-class LevelULHand(MainHand):
+class LevelsHand(MainHand):
 	def post(self):
 		uid_str = self.request.get('user_id')
 		level_name = self.request.get('level_name')
@@ -46,18 +39,53 @@ class LevelULHand(MainHand):
 			new_level.put()
 			self.write(new_level.key().id())
 		else:
-			self.write('ERROR: Missing required properties: uid or level_name');
+			logging.error('Missing required properties: uid or level_name')
+			self.abort(404)
 
-class LevelDLHand(MainHand):
-	def get(self, resource):
-		beginning_path_len = 12 #the length of the string '/api/levels/'
+class LevelsIdHand(MainHand):
+	def get(self, levelId):
+		beginning_path_len = 8 #the length of the string '/levels/'
 		total_path_len = len(self.request.path)
 		lid = int(self.request.path[beginning_path_len:total_path_len])
 		query = Level.get_by_id(lid)
+
 		if(query == None):
+			logging.error('Level does not exist')
 			self.abort(404)
 		else:
 			self.write(query.live_level_data)
+
+	def post(self, levelId):
+		flag = self.request.get('flag')
+		lid_str = self.request.get('level_id')
+		uid_str = self.request.get('user_id')
+		level_name = self.request.get('level_name')
+		live_level_data = self.request.get('live_level_data')
+		draft_level_data = self.request.get('draft_level_data')
+
+		beginning_path_len = 8 #the length of the string '/levels/'
+		total_path_len = len(self.request.path)
+		lid = int(self.request.path[beginning_path_len:total_path_len])
+
+		query = Level.get_by_id(lid)
+		if(query == None):
+			logging.error('Level does not exist')
+			self.abort(404)
+
+		if(flag == 'update'):
+			if(uid_str != ''):
+				query.uid = int(uid_str)
+			if(level_name != ''):
+				query.level_name = level_name
+			if(live_level_data != ''):
+				query.live_level_data = live_level_data
+			if(draft_level_data != ''):
+				query.draft_level_data = draft_level_data
+			query.put()
+			self.write(query.key().id())
+		else:
+			logging.error('No flag set')
+			self.abort(404)
 
 class DSConnHand(MainHand):
 	def get(self):
@@ -67,7 +95,7 @@ class DSConnHand(MainHand):
 
 app = webapp2.WSGIApplication([
     ('/?', FrontHand),
-    ('/api/levels/?', LevelULHand),
-    ('/api/levels/([^/]+)?', LevelDLHand),
+    ('/levels/?', LevelsHand),
+    ('/levels/([^/]+)?', LevelsIdHand),
     ('/dsconn', DSConnHand)
 ], debug=True)

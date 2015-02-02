@@ -2,18 +2,10 @@ import jinja2
 import os
 import webapp2
 
-from google.appengine.ext import db
+from models import Level
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
-
-class Level(db.Model):
-	uid = db.IntegerProperty(required = True)
-	level_name = db.StringProperty(required = True)
-	live_level_data = db.TextProperty()
-	draft_level_data = db.TextProperty()
-	created = db.DateTimeProperty(auto_now_add = True)
-	modified = db.DateTimeProperty(auto_now_add = True)
 
 class MainHand(webapp2.RequestHandler):
 	def write(self, *a, **kw):
