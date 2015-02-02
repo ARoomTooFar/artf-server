@@ -9,13 +9,12 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-- url: /crossdomain\.xml
-  static_files: static/root/crossdomain.xml
-  upload: static/root/crossdomain.xml
-
 - url: .*
   script: test.app
 
 libraries:
+- name: jinja2
+  version: "2.6"
+
 - name: webapp2
   version: "2.5.2"

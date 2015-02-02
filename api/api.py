@@ -1,15 +1,9 @@
 #!/usr/bin/env python
 import datetime
-import jinja2
-import os
-import urllib
 import webapp2
 
-from google.appengine.api import users
 from google.appengine.ext import db
-
-TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
-JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
+from google.appengine.api import users
 
 class Level(db.Model):
 	uid = db.IntegerProperty(required = True)
@@ -32,7 +26,7 @@ class MainHand(webapp2.RequestHandler):
 
 class FrontHand(MainHand):
 	def get(self):
-		self.write('<html><head><title>ARTF Game Server</title></head><body>ARTF Game Server 0.0.2</body></html>')
+		self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.2</body></html>')
 
 class LevelULHand(MainHand):
 	def post(self):
@@ -61,20 +55,8 @@ class LevelDLHand(MainHand):
 		else:
 			self.write(query.live_level_data)
 
-class UploadPageTestHand(MainHand):
-	def get(self):
-		self.write('<html><head><title>Upload Test</title></head><body>')
-		self.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
-		self.write('Upload File: <input type="file" name="file"><br> <input type="submit name="submit" value="Submit"> </form></body></html>')
-
-class TemplateTestHand(MainHand):
-	def get(self):
-		self.render('test.html')
-
 app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/api/levels/?', LevelULHand),
-    ('/api/levels/([^/]+)?', LevelDLHand),
-    ('/upload-page-test', UploadPageTestHand),
-    ('/template-test', TemplateTestHand)
+    ('/api/levels/([^/]+)?', LevelDLHand)
 ], debug=True)
