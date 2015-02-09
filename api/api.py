@@ -27,19 +27,22 @@ class FrontHand(MainHand):
 
 class LevelsHand(MainHand):
 	def post(self):
-		uid_str = self.request.get('user_id')
-		level_name = self.request.get('level_name')
 		live_level_data = self.request.get('live_level_data')
 		draft_level_data = self.request.get('draft_level_data')
+		level_name = self.request.get('level_name')
+		acct_id_str = self.request.get('acct_id')
+		mach_id_str = self.request.get('mach_id')
 		
-		uid = int(uid_str) #need to check if non-int is input later
+		#need to check if non-int is input later
+		acct_id = int(acct_id_str)
+		mach_id = int(mach_id_str)
 		
-		if uid and level_name:
-			new_level = Level(uid = uid, level_name = level_name, live_level_data = live_level_data, draft_level_data = draft_level_data)
+		if level_name and acct_id and mach_id:
+			new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, level_name=level_name, acct_id=acct_id, mach_id=mach_id)
 			new_level.put()
 			self.write(new_level.key().id())
 		else:
-			logging.error('Missing required properties: uid or level_name')
+			logging.error('Missing required properties: acct_id, mach_id, or level_name')
 			self.abort(404)
 
 class LevelsIdHand(MainHand):

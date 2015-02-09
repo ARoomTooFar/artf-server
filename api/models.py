@@ -10,7 +10,7 @@ class Level(db.Model):
 	live_level_data = db.TextProperty()
 	draft_level_data = db.TextProperty()
 	level_name = db.StringProperty(required = True)
-	user_id = db.IntegerProperty(required = True)
+	acct_id = db.IntegerProperty(required = True)
 	mach_id = db.IntegerProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	modified = db.DateTimeProperty(auto_now_add = True)
