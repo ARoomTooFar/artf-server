@@ -96,9 +96,14 @@ class DSConnHand(MainHand):
 		levels = list(query)
 		self.render('dsconn.html', levels = levels)
 
+class UploadTestHand(MainHand):
+	def get(self):
+		self.render('uploadtest.html')
+
 app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/levels/?', LevelsHand),
     ('/levels/([^/]+)?', LevelsIdHand),
-    ('/dsconn', DSConnHand)
+    ('/dsconn', DSConnHand),
+    ('/uploadtest', UploadTestHand)
 ], debug=True)
