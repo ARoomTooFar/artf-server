@@ -23,7 +23,7 @@ class MainHand(webapp2.RequestHandler):
 
 class FrontHand(MainHand):
 	def get(self):
-		self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.2</body></html>')
+		self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.3</body></html>')
 
 class LevelsHand(MainHand):
 	def post(self):
@@ -33,7 +33,6 @@ class LevelsHand(MainHand):
 		acct_id_str = self.request.get('acct_id')
 		mach_id_str = self.request.get('mach_id')
 		
-		#need to check if non-int is input later
 		acct_id = int(acct_id_str)
 		mach_id = int(mach_id_str)
 		
