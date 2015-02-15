@@ -30,18 +30,18 @@ class LevelsHand(MainHand):
 		live_level_data = self.request.get('live_level_data')
 		draft_level_data = self.request.get('draft_level_data')
 		level_name = self.request.get('level_name')
-		acct_id_str = self.request.get('acct_id')
+		game_acct_id_str = self.request.get('game_acct_id')
 		mach_id_str = self.request.get('mach_id')
 		
-		acct_id = int(acct_id_str)
+		game_acct_id = int(game_acct_id_str)
 		mach_id = int(mach_id_str)
 		
-		if level_name and acct_id and mach_id:
-			new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, level_name=level_name, acct_id=acct_id, mach_id=mach_id)
+		if level_name and game_acct_id and mach_id:
+			new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, level_name=level_name, game_acct_id=game_acct_id, mach_id=mach_id)
 			new_level.put()
 			self.write(new_level.key().id())
 		else:
-			logging.error('Missing required properties: acct_id, mach_id, or level_name')
+			logging.error('Missing required properties: game_acct_id, mach_id, or level_name')
 			self.abort(404)
 
 class LevelsIdHand(MainHand):
@@ -59,26 +59,26 @@ class LevelsIdHand(MainHand):
 
 	def post(self, levelId):
 		flag = self.request.get('flag')
-		lid_str = self.request.get('level_id')
-		uid_str = self.request.get('user_id')
 		level_name = self.request.get('level_name')
+		game_acct_id_str = self.request.get('game_acct_id')
 		live_level_data = self.request.get('live_level_data')
 		draft_level_data = self.request.get('draft_level_data')
 
+		# Get level ID from end of URL path
 		beginning_path_len = 8 #the length of the string '/levels/'
 		total_path_len = len(self.request.path)
-		lid = int(self.request.path[beginning_path_len:total_path_len])
+		level_id = int(self.request.path[beginning_path_len:total_path_len])
 
-		query = Level.get_by_id(lid)
+		query = Level.get_by_id(level_id)
 		if(query == None):
 			logging.error('Level does not exist')
 			self.abort(404)
 		else:
 			if(flag == 'update'):
-				if(uid_str != ''):
-					query.uid = int(uid_str)
 				if(level_name != ''):
 					query.level_name = level_name
+				if(game_acct_id_str != ''):
+					query.game_acct_id = int(game_acct_id_str)
 				if(live_level_data != ''):
 					query.live_level_data = live_level_data
 				if(draft_level_data != ''):
@@ -87,6 +87,7 @@ class LevelsIdHand(MainHand):
 				self.write(query.key().id())
 			elif(flag == 'delete'):
 				query.delete()
+				logging.info('Level ' + str(level_id) + ' deleted')
 				self.write(query.key().id())
 			else:
 				logging.error('No flag set')

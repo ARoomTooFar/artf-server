@@ -10,25 +10,28 @@ class Level(db.Model):
 	live_level_data = db.TextProperty()
 	draft_level_data = db.TextProperty()
 	level_name = db.StringProperty(required = True)
-	acct_id = db.IntegerProperty(required = True)
+	game_acct_id = db.IntegerProperty(required = True)
 	mach_id = db.IntegerProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	modified = db.DateTimeProperty(auto_now_add = True)
 
-class Account(db.Model):
-	acct_name = db.StringProperty(required = True)
-	password = db.StringProperty(required = True)
+class GameAccount(db.Model):
+	game_acct_name = db.StringProperty(required = True)
+	game_acct_password = db.StringProperty(required = True)
+	web_acct_id = db.IntegerProperty()
 	created = db.DateTimeProperty(auto_now_add = True)
 	modified = db.DateTimeProperty(auto_now_add = True)
 
 class Character(db.Model):
 	char_name = db.StringProperty(required = True)
 	char_data = db.TextProperty()
-	acct_id = db.IntegerProperty(required = True)
+	game_acct_id = db.IntegerProperty(required = True)
+	money = db.IntegerProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
 	modified = db.DateTimeProperty(auto_now_add = True)
 
 class Item(db.Model):
+	item_num = db.IntegerProperty()
 	mod_health = db.IntegerProperty()
 	mod_armor = db.IntegerProperty()
 	mod_strength = db.IntegerProperty()
