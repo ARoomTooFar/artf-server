@@ -1,3 +1,3 @@
 routers = dict(
-  BASE  = dict(default_application='artfweb'),
+  BASE  = dict(default_application='welcome'),
 )
