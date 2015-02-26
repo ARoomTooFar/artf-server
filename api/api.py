@@ -5,7 +5,8 @@ import logging
 import os
 import webapp2
 
-from models import Level
+from google.appengine.ext import db
+from models import Level, GameAccount
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
@@ -93,6 +94,25 @@ class LevelsIdHand(MainHand):
 				logging.error('No flag set')
 				self.abort(404)
 
+class LoginHand(MainHand):
+	def post(self):
+		input_username = self.request.get('game_acct_name')
+		input_password = self.request.get('game_acct_password')
+
+		query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_username).get()
+		
+		if(input_password == query.game_acct_password):
+			self.write('LOGIN SUCCESS')
+		else:
+			self.write('')
+
+#placeholder RegisterHand
+class RegisterHand(MainHand):
+	def get(self):
+		new_account = GameAccount(game_acct_name="booty", game_acct_password="butt")
+		new_account.put()
+		self.write(new_account)
+
 class DSConnHand(MainHand):
 	def get(self):
 		query = Level.all()
@@ -107,6 +127,8 @@ app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/levels/?', LevelsHand),
     ('/levels/([^/]+)?', LevelsIdHand),
+    ('/login/?', LoginHand),
+    ('/register/?', RegisterHand),
     ('/dsconn', DSConnHand),
     ('/uploadtest', UploadTestHand)
 ], debug=True)
