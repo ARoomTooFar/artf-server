@@ -96,22 +96,38 @@ class LevelsIdHand(MainHand):
 
 class LoginHand(MainHand):
 	def post(self):
-		input_username = self.request.get('game_acct_name')
-		input_password = self.request.get('game_acct_password')
+		input_game_acct_name = self.request.get('game_acct_name')
+		input_game_acct_password = self.request.get('game_acct_password')
 
-		query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_username).get()
+		entity = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name).get()
 		
-		if(input_password == query.game_acct_password):
+		if(input_game_acct_password == entity.game_acct_password):
 			self.write('LOGIN SUCCESS')
 		else:
 			self.write('')
 
-#placeholder RegisterHand
 class RegisterHand(MainHand):
-	def get(self):
-		new_account = GameAccount(game_acct_name="booty", game_acct_password="butt")
-		new_account.put()
-		self.write(new_account)
+    """def get(self):
+        new_account = GameAccount(game_acct_name="booty", game_acct_password="butt")
+        new_account.put()"""
+
+    def post(self):
+        input_game_acct_name = self.request.get('game_acct_name')
+        input_game_acct_password = self.request.get('game_acct_password')
+
+        logging.info(input_game_acct_name)
+        logging.info(input_game_acct_password)
+
+        query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name)
+        entity = query.get()
+
+        if(query.count() == 0):
+            self.write('REGISTRATION SUCCESS')
+        else:
+            self.write('')
+
+        #new_account = GameAccount(game_acct_name="booty", game_acct_password="butt")
+        #new_account.put()
 
 class DSConnHand(MainHand):
 	def get(self):
@@ -127,8 +143,8 @@ app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/levels/?', LevelsHand),
     ('/levels/([^/]+)?', LevelsIdHand),
-    ('/login/?', LoginHand),
-    ('/register/?', RegisterHand),
+    ('/gameaccount/login/?', LoginHand),
+    ('/gameaccount/register/?', RegisterHand),
     ('/dsconn', DSConnHand),
     ('/uploadtest', UploadTestHand)
 ], debug=True)
