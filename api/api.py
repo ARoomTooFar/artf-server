@@ -107,10 +107,6 @@ class LoginHand(MainHand):
 			self.write('')
 
 class RegisterHand(MainHand):
-    """def get(self):
-        new_account = GameAccount(game_acct_name="booty", game_acct_password="butt")
-        new_account.put()"""
-
     def post(self):
         input_game_acct_name = self.request.get('game_acct_name')
         input_game_acct_password = self.request.get('game_acct_password')
@@ -119,15 +115,13 @@ class RegisterHand(MainHand):
         logging.info(input_game_acct_password)
 
         query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name)
-        entity = query.get()
 
         if(query.count() == 0):
-            self.write('REGISTRATION SUCCESS')
+			new_game_acct = GameAccount(game_acct_name=input_game_acct_name, game_acct_password=input_game_acct_password)
+			new_game_acct.put()
+			self.write(new_game_acct.key().id())
         else:
             self.write('')
-
-        #new_account = GameAccount(game_acct_name="booty", game_acct_password="butt")
-        #new_account.put()
 
 class DSConnHand(MainHand):
 	def get(self):
