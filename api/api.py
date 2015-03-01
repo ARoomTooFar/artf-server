@@ -30,19 +30,18 @@ class LevelsHand(MainHand):
 	def post(self):
 		live_level_data = self.request.get('live_level_data')
 		draft_level_data = self.request.get('draft_level_data')
-		level_name = self.request.get('level_name')
 		game_acct_id_str = self.request.get('game_acct_id')
 		mach_id_str = self.request.get('mach_id')
 		
 		game_acct_id = int(game_acct_id_str)
 		mach_id = int(mach_id_str)
 		
-		if level_name and game_acct_id and mach_id:
-			new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, level_name=level_name, game_acct_id=game_acct_id, mach_id=mach_id)
+		if game_acct_id and mach_id:
+			new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, game_acct_id=game_acct_id, mach_id=mach_id)
 			new_level.put()
 			self.write(new_level.key().id())
 		else:
-			logging.error('Missing required properties: game_acct_id, mach_id, or level_name')
+			logging.error('Missing required properties: game_acct_id or mach_id')
 			self.abort(404)
 
 class LevelsIdHand(MainHand):
@@ -60,7 +59,6 @@ class LevelsIdHand(MainHand):
 
 	def post(self, levelId):
 		flag = self.request.get('flag')
-		level_name = self.request.get('level_name')
 		game_acct_id_str = self.request.get('game_acct_id')
 		live_level_data = self.request.get('live_level_data')
 		draft_level_data = self.request.get('draft_level_data')
@@ -76,8 +74,6 @@ class LevelsIdHand(MainHand):
 			self.abort(404)
 		else:
 			if(flag == 'update'):
-				if(level_name != ''):
-					query.level_name = level_name
 				if(game_acct_id_str != ''):
 					query.game_acct_id = int(game_acct_id_str)
 				if(live_level_data != ''):
@@ -119,6 +115,7 @@ class RegisterHand(MainHand):
         if(query.count() == 0):
 			new_game_acct = GameAccount(game_acct_name=input_game_acct_name, game_acct_password=input_game_acct_password)
 			new_game_acct.put()
+
 			self.write(new_game_acct.key().id())
         else:
             self.write('')

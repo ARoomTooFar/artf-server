@@ -9,7 +9,6 @@ class Machine(db.Model):
 class Level(db.Model):
 	live_level_data = db.TextProperty()
 	draft_level_data = db.TextProperty()
-	level_name = db.StringProperty(required = True)
 	game_acct_id = db.IntegerProperty(required = True)
 	mach_id = db.IntegerProperty(required = True)
 	created = db.DateTimeProperty(auto_now_add = True)
