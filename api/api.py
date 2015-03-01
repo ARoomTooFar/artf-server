@@ -6,7 +6,7 @@ import os
 import webapp2
 
 from google.appengine.ext import db
-from models import Level, GameAccount, Character
+from models import Level, GameAccount, Character, Machine
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
@@ -84,8 +84,8 @@ class LevelsIdHand(MainHand):
 				self.write(query.key().id())
 			elif(flag == 'delete'):
 				query.delete()
-				logging.info('Level ' + str(level_id) + ' deleted')
 				self.write(query.key().id())
+				logging.info('Level ' + str(level_id) + ' deleted')
 			else:
 				logging.error('No flag set')
 				self.abort(404)
@@ -103,17 +103,14 @@ class LoginHand(MainHand):
 			self.write('')
 
 class RegisterHand(MainHand):
-    def post(self):
-        input_game_acct_name = self.request.get('game_acct_name')
-        input_game_acct_password = self.request.get('game_acct_password')
-        input_char_data = self.request.get('char_data')
+	def post(self):
+		input_game_acct_name = self.request.get('game_acct_name')
+		input_game_acct_password = self.request.get('game_acct_password')
+		input_char_data = self.request.get('char_data')
 
-        logging.info(input_game_acct_name)
-        logging.info(input_game_acct_password)
+		query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name)
 
-        query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name)
-
-        if(query.count() == 0):
+		if(query.count() == 0):
 			new_game_acct = GameAccount(game_acct_name=input_game_acct_name, game_acct_password=input_game_acct_password)
 			new_game_acct.put()
 
@@ -123,8 +120,23 @@ class RegisterHand(MainHand):
 			new_char.put()
 
 			self.write(game_acct_id)
-        else:
-            self.write('')
+			logging.info('Game account ' + str(game_acct_id) + ' created')
+		else:
+			logging.error('game_acct_name already exists')
+        	self.write('')
+
+class MachineHand(MainHand):
+	def post(self):
+		input_mach_name = self.request.get('mach_name')
+		input_venue_name = self.request.get('venue_name')
+
+		new_mach = Machine(mach_name=input_mach_name, venue_name=input_venue_name)
+		new_mach.put()
+
+		mach_id = new_mach.key().id()
+
+		self.write(mach_id)
+		logging.info('Machine ' + str(mach_id) + ' created')
 
 class DSConnHand(MainHand):
 	def get(self):
@@ -142,6 +154,7 @@ app = webapp2.WSGIApplication([
     ('/levels/([^/]+)?', LevelsIdHand),
     ('/gameaccount/login/?', LoginHand),
     ('/gameaccount/register/?', RegisterHand),
+    ('/machine/?', MachineHand),
     ('/dsconn', DSConnHand),
     ('/uploadtest', UploadTestHand)
 ], debug=True)
