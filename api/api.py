@@ -33,29 +33,38 @@ class LevelsHand(MainHand):
 		game_acct_id_str = self.request.get('game_acct_id')
 		mach_id_str = self.request.get('mach_id')
 		
-		game_acct_id = int(game_acct_id_str)
-		mach_id = int(mach_id_str)
-		
-		if game_acct_id and mach_id:
-			new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, game_acct_id=game_acct_id, mach_id=mach_id)
-			new_level.put()
-			self.write(new_level.key().id())
+		if(game_acct_id_str.isdigit() and mach_id_str.isdigit()):
+			game_acct_id = int(game_acct_id_str)
+			mach_id = int(mach_id_str)
+
+			if game_acct_id and mach_id:
+				new_level = Level(live_level_data=live_level_data, draft_level_data=draft_level_data, game_acct_id=game_acct_id, mach_id=mach_id)
+				new_level.put()
+
+				new_level_id = str(new_level.key().id())
+				self.write(new_level_id)
+				logging.info('Level ' + new_level_id + ' created')
+			else:
+				logging.error('Level upload failed. game_acct_id or mach_id cannot be 0.')
+				self.abort(404)
 		else:
-			logging.error('Missing required properties: game_acct_id or mach_id')
+			logging.error('Level upload failed. game_acct_id and mach_id must be numbers.')
 			self.abort(404)
 
 class LevelsIdHand(MainHand):
 	def get(self, levelId):
 		beginning_path_len = 8 #the length of the string '/levels/'
 		total_path_len = len(self.request.path)
-		lid = int(self.request.path[beginning_path_len:total_path_len])
-		query = Level.get_by_id(lid)
+		level_id = int(self.request.path[beginning_path_len:total_path_len]) #must be cast to int for query
+		entity = Level.get_by_id(level_id)
+		level_id = str(level_id) #must be cast to str for logging
 
-		if(query == None):
-			logging.error('Level does not exist')
+		if(entity == None):
+			logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
 			self.abort(404)
 		else:
-			self.write(query.live_level_data)
+			self.write(level_id)
+			logging.info('Level ' + level_id  + ' downloaded')
 
 	def post(self, levelId):
 		flag = self.request.get('flag')
@@ -66,43 +75,59 @@ class LevelsIdHand(MainHand):
 		# Get level ID from end of URL path
 		beginning_path_len = 8 #the length of the string '/levels/'
 		total_path_len = len(self.request.path)
-		level_id = int(self.request.path[beginning_path_len:total_path_len])
+		level_id = int(self.request.path[beginning_path_len:total_path_len]) #must be cast to int for query
 
-		query = Level.get_by_id(level_id)
-		if(query == None):
-			logging.error('Level does not exist')
+		entity = Level.get_by_id(level_id)
+		if(entity == None):
+			logging.error('Level manipulation failed. Level does not exist in Datastore.')
 			self.abort(404)
 		else:
+			level_id = str(level_id) #must be cast to str for logging
 			if(flag == 'update'):
 				if(game_acct_id_str != ''):
-					query.game_acct_id = int(game_acct_id_str)
+					entity.game_acct_id = int(game_acct_id_str)
 				if(live_level_data != ''):
-					query.live_level_data = live_level_data
+					entity.live_level_data = live_level_data
 				if(draft_level_data != ''):
-					query.draft_level_data = draft_level_data
-				query.put()
-				self.write(query.key().id())
+					entity.draft_level_data = draft_level_data
+				entity.put()
+				self.write(level_id)
+				logging.info('Level ' + level_id + ' updated')
 			elif(flag == 'delete'):
-				query.delete()
-				self.write(query.key().id())
-				logging.info('Level ' + str(level_id) + ' deleted')
+				entity.delete()
+				self.write(level_id)
+				logging.info('Level ' + level_id + ' deleted')
 			else:
-				logging.error('No flag set')
+				logging.error('Level manipulation failed. No manipulation flag set.')
 				self.abort(404)
 
-class LoginHand(MainHand):
+class GameLoginHand(MainHand):
 	def post(self):
 		input_game_acct_name = self.request.get('game_acct_name')
 		input_game_acct_password = self.request.get('game_acct_password')
 
 		entity = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name).get()
-		
-		if(input_game_acct_password == entity.game_acct_password):
-			self.write('LOGIN SUCCESS')
+
+		if(entity != None):
+			game_acct_id = str(entity.key().id())
+
+			if(input_game_acct_password == entity.game_acct_password):
+				entity = db.GqlQuery('SELECT * FROM Character WHERE game_acct_id = :1', int(game_acct_id)).get()
+				
+				if(entity == None):
+					logging.error('Character download for game account ' + game_acct_id +' failed. Character doesn\'t exist for game account.')
+					self.write('')
+				else:
+					self.write(entity.char_data)
+					logging.info('Game account ' + game_acct_id + ' logged in') #post location and maybe account name later
+			else:
+				self.write('')
+				logging.info('Login failed for game account ' + game_acct_id + '. Password incorrect.')
 		else:
 			self.write('')
+			logging.info('Login failed for game account ' + input_game_acct_name + '. game_acct_name doesn\'t exist.')
 
-class RegisterHand(MainHand):
+class GameRegisterHand(MainHand):
 	def post(self):
 		input_game_acct_name = self.request.get('game_acct_name')
 		input_game_acct_password = self.request.get('game_acct_password')
@@ -119,10 +144,11 @@ class RegisterHand(MainHand):
 			new_char = Character(char_data=input_char_data, game_acct_id=game_acct_id)
 			new_char.put()
 
+			game_acct_id = str(game_acct_id) #must be cast to str for logging
 			self.write(game_acct_id)
-			logging.info('Game account ' + str(game_acct_id) + ' created')
+			logging.info('Game account ' + game_acct_id + ' created')
 		else:
-			logging.error('game_acct_name already exists')
+			logging.error('Registration failed for ' + input_game_acct_name + '. game_acct_name already exists.')
         	self.write('')
 
 class MachineHand(MainHand):
@@ -133,10 +159,10 @@ class MachineHand(MainHand):
 		new_mach = Machine(mach_name=input_mach_name, venue_name=input_venue_name)
 		new_mach.put()
 
-		mach_id = new_mach.key().id()
+		mach_id = str(new_mach.key().id())
 
 		self.write(mach_id)
-		logging.info('Machine ' + str(mach_id) + ' created')
+		logging.info('Machine ' + mach_id + ' created')
 
 class DSConnHand(MainHand):
 	def get(self):
@@ -152,8 +178,8 @@ app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/levels/?', LevelsHand),
     ('/levels/([^/]+)?', LevelsIdHand),
-    ('/gameaccount/login/?', LoginHand),
-    ('/gameaccount/register/?', RegisterHand),
+    ('/gameaccount/login/?', GameLoginHand),
+    ('/gameaccount/register/?', GameRegisterHand),
     ('/machine/?', MachineHand),
     ('/dsconn', DSConnHand),
     ('/uploadtest', UploadTestHand)
