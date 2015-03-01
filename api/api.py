@@ -6,7 +6,7 @@ import os
 import webapp2
 
 from google.appengine.ext import db
-from models import Level, GameAccount
+from models import Level, GameAccount, Character
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
@@ -106,6 +106,7 @@ class RegisterHand(MainHand):
     def post(self):
         input_game_acct_name = self.request.get('game_acct_name')
         input_game_acct_password = self.request.get('game_acct_password')
+        input_char_data = self.request.get('char_data')
 
         logging.info(input_game_acct_name)
         logging.info(input_game_acct_password)
@@ -116,7 +117,12 @@ class RegisterHand(MainHand):
 			new_game_acct = GameAccount(game_acct_name=input_game_acct_name, game_acct_password=input_game_acct_password)
 			new_game_acct.put()
 
-			self.write(new_game_acct.key().id())
+			game_acct_id = new_game_acct.key().id()
+
+			new_char = Character(char_data=input_char_data, game_acct_id=game_acct_id)
+			new_char.put()
+
+			self.write(game_acct_id)
         else:
             self.write('')
 
