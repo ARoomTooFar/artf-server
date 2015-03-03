@@ -63,7 +63,7 @@ class LevelsIdHand(MainHand):
 			logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
 			self.abort(404)
 		else:
-			self.write(level_id)
+			self.write(entity.live_level_data)
 			logging.info('Level ' + level_id  + ' downloaded')
 
 	def post(self, levelId):
