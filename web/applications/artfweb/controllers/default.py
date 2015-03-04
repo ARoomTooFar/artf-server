@@ -21,7 +21,8 @@ def index():
     return dict(message=T('Hello World'))
 
 def editor():
-    return dict(display_title = "Level Editor")
+    lvlId = "5715999101812736";
+    return dict(display_title="Level Editor", lvlId=lvlId)
 
 def user():
     """
