@@ -18,10 +18,20 @@ def index():
     return auth.wiki()
     """
     response.flash = T("Welcome to web2py!")
-    return dict(message=T('Hello World'))
+
+    if auth.user:
+        msg = A('Edit your level', _class='btn', _href=URL('default', 'editor'))
+    else:
+        msg = "Please login to edit your level!";
+
+    return dict(message=T('Hello World'), msg=msg)
 
 def editor():
-    lvlId = "5715999101812736";
+    if auth.user:
+        lvlId = "5715999101812736";
+    else:
+        lvlId = "0";
+
     return dict(display_title="Level Editor", lvlId=lvlId)
 
 def user():

@@ -6,3 +6,4 @@ sessions/*
 *.pyc
 *.bak
 httpserver.log
+applications/admin/sessions*
