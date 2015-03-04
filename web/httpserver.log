@@ -138,3 +138,8 @@
 127.0.0.1, 2015-03-04 05:37:03, GET, /artfweb/static/images/twitter.png, HTTP/1.1, 304, 0.000000
 127.0.0.1, 2015-03-04 05:37:03, GET, /artfweb/static/images/facebook.png, HTTP/1.1, 304, 0.002000
 127.0.0.1, 2015-03-04 05:37:03, GET, /artfweb/static/images/gplus-32.png, HTTP/1.1, 304, 0.001000
+127.0.0.1, 2015-03-04 05:37:40, GET, /appadmin, HTTP/1.1, 200, 0.028000
+127.0.0.1, 2015-03-04 05:37:40, GET, /appadmin/hooks, HTTP/1.1, 200, 0.032000
+127.0.0.1, 2015-03-04 05:37:45, GET, /, HTTP/1.1, 200, 0.020000
+127.0.0.1, 2015-03-04 05:37:47, GET, /admin/site, HTTP/1.1, 200, 0.033000
+127.0.0.1, 2015-03-04 05:37:47, GET, /admin/static/_2.9.12/images/glyphicons-halflings.png, HTTP/1.1, 200, 0.180000
