@@ -9,6 +9,10 @@
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
 
+#from google.appengine.ext import db
+#from google.appengine.ext.db import GqlQuery
+#db = GQLDB()
+
 def index():
     """
     example action using the internationalization operator T and flash
@@ -33,6 +37,13 @@ def editor():
         lvlId = "0";
 
     return dict(display_title="Level Editor", lvlId=lvlId)
+
+def dbtest():
+    q = db().select(db.Level.ALL)
+    #levels = db.GqlQuery("SELECT * FROM Level ORDER BY created DESC")
+    #personresults = db(Level).select(db.Level.level_name)
+
+    return dict(display_title="DB Test", q=q)
 
 def user():
     """
