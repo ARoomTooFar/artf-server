@@ -153,18 +153,14 @@ class GameRegisterHand(MainHand):
 
 class CharactersHand(MainHand):
 	def get(self, characterId):
-	    beginning_path_len = 12 #the length of the string '/characters/'
-	    total_path_len = len(self.request.path)
-	    character_id = int(self.request.path[beginning_path_len:total_path_len]) #must be cast to int for query
-	    entity = Character.get_by_id(character_id)
-	    character_id = str(character_id) #must be cast to str for logging
+	    entity = Character.get_by_id(int(characterId))
 
 	    if(entity == None):
-	        logging.error('Character download failed. Character ' + character_id + ' does not exist in Datastore.')
+	        logging.error('Character download failed. Character ' + characterId + ' does not exist in Datastore.')
 	        self.abort(404)
 	    else:
 	        self.write(entity.char_data)
-	        logging.info('Character ' + character_id  + ' downloaded')
+	        logging.info('Character ' + characterId  + ' downloaded')
 
 class MachineHand(MainHand):
     def post(self):
