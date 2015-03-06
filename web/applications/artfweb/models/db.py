@@ -48,7 +48,7 @@ service = Service()
 plugins = PluginManager()
 
 auth.settings.extra_fields['auth_user'] = [
-    Field('game_acct_id', 'integer')
+    Field('game_acct_id', 'bigint')
 ]
 
 ## create all tables needed by auth if not custom tables

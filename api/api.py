@@ -159,6 +159,25 @@ class CharactersHand(MainHand):
             self.write(entity.char_data)
             logging.info('Character ' + character_id + ' downloaded')
 
+    def post(self, character_id):
+        char_data = self.request.get('char_data')
+
+        entity = Character.get_by_id(int(character_id))
+
+        if entity is None:
+            logging.error('Character update failed. Character does not exist in Datastore.')
+            self.abort(404)
+        else:
+            if char_data != '':
+                entity.char_data = char_data
+                entity.put()
+                self.write(character_id)
+                logging.info('Character ' + character_id + ' updated')
+            else:
+                logging.error('Character update failed. Character ' + character_id + ' cannot have empty character data.')
+                self.abort(404)
+
+
 class MachineHand(MainHand):
     def post(self):
         input_mach_name = self.request.get('mach_name')
