@@ -32,18 +32,27 @@ def index():
 
 def editor():
     if auth.user:
-        lvlId = "5715999101812736";
+        lvlId = '5715999101812736';
     else:
-        lvlId = "0";
+        lvlId = '0';
 
-    return dict(display_title="Level Editor", lvlId=lvlId)
+    return dict(display_title='Level Editor', lvlId=lvlId)
 
 def dbtest():
     q = db().select(db.Level.ALL)
     #levels = db.GqlQuery("SELECT * FROM Level ORDER BY created DESC")
     #personresults = db(Level).select(db.Level.level_name)
 
-    return dict(display_title="DB Test", q=q)
+    return dict(display_title='DB Test', q=q)
+
+def dbinput():
+    form = SQLFORM(db.Level)
+
+    if form.process().accepted:
+        session.flash = T('Level added')
+        redirect(URL('default', 'dbinput'))
+
+    return dict(display_title='DB Input', form=form)
 
 def user():
     """

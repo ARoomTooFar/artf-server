@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import datetime
 import jinja2
 import logging
 import os
@@ -10,6 +9,7 @@ from models import Level, GameAccount, Character, Machine
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader = jinja2.FileSystemLoader(TEMPLATE_DIR), autoescape = True)
+
 
 class MainHand(webapp2.RequestHandler):
     def write(self, *a, **kw):
@@ -22,9 +22,11 @@ class MainHand(webapp2.RequestHandler):
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
 
+
 class FrontHand(MainHand):
     def get(self):
         self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.3</body></html>')
+
 
 class LevelsHand(MainHand):
     def post(self):
@@ -33,7 +35,7 @@ class LevelsHand(MainHand):
         game_acct_id_str = self.request.get('game_acct_id')
         mach_id_str = self.request.get('mach_id')
 
-        if(game_acct_id_str.isdigit() and mach_id_str.isdigit()):
+        if game_acct_id_str.isdigit() and mach_id_str.isdigit():
             game_acct_id = int(game_acct_id_str)
             mach_id = int(mach_id_str)
 
@@ -51,51 +53,48 @@ class LevelsHand(MainHand):
             logging.error('Level upload failed. game_acct_id and mach_id must be numbers.')
             self.abort(404)
 
+
 class LevelsIdHand(MainHand):
     def get(self, level_id):
         entity = Level.get_by_id(int(level_id))
 
-        if(entity == None):
+        if entity is None:
             logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
             self.abort(404)
         else:
             self.write(entity.live_level_data)
             logging.info('Level ' + level_id  + ' downloaded')
 
-    def post(self, levelId):
+    def post(self, level_id):
         flag = self.request.get('flag')
         game_acct_id_str = self.request.get('game_acct_id')
         live_level_data = self.request.get('live_level_data')
         draft_level_data = self.request.get('draft_level_data')
 
-        # Get level ID from end of URL path
-        beginning_path_len = 8 #the length of the string '/levels/'
-        total_path_len = len(self.request.path)
-        level_id = int(self.request.path[beginning_path_len:total_path_len]) #must be cast to int for query
+        entity = Level.get_by_id(int(level_id))
 
-        entity = Level.get_by_id(level_id)
-        if(entity == None):
+        if entity is None:
             logging.error('Level manipulation failed. Level does not exist in Datastore.')
             self.abort(404)
         else:
-            level_id = str(level_id) #must be cast to str for logging
-            if(flag == 'update'):
-                if(game_acct_id_str != ''):
+            if flag == 'update':
+                if game_acct_id_str != '':
                     entity.game_acct_id = int(game_acct_id_str)
-                if(live_level_data != ''):
+                if live_level_data != '':
                     entity.live_level_data = live_level_data
-                if(draft_level_data != ''):
+                if draft_level_data != '':
                     entity.draft_level_data = draft_level_data
                 entity.put()
                 self.write(level_id)
                 logging.info('Level ' + level_id + ' updated')
-            elif(flag == 'delete'):
+            elif flag == 'delete':
                 entity.delete()
                 self.write(level_id)
                 logging.info('Level ' + level_id + ' deleted')
             else:
                 logging.error('Level manipulation failed. No manipulation flag set.')
                 self.abort(404)
+
 
 class GameLoginHand(MainHand):
     def post(self):
@@ -104,13 +103,13 @@ class GameLoginHand(MainHand):
 
         entity = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name).get()
 
-        if(entity != None):
+        if entity is not None:
             game_acct_id = str(entity.key().id())
 
-            if(input_game_acct_password == entity.game_acct_password):
+            if input_game_acct_password == entity.game_acct_password:
                 entity = db.GqlQuery('SELECT * FROM Character WHERE game_acct_id = :1', int(game_acct_id)).get()
 
-                if(entity == None):
+                if entity is None:
                     logging.error('Character download for game account ' + game_acct_id +' failed. Character doesn\'t exist for game account.')
                     self.write('')
                 else:
@@ -123,6 +122,7 @@ class GameLoginHand(MainHand):
             self.write('')
             logging.info('Login failed for game account ' + input_game_acct_name + '. game_acct_name doesn\'t exist.')
 
+
 class GameRegisterHand(MainHand):
     def post(self):
         input_game_acct_name = self.request.get('game_acct_name')
@@ -131,7 +131,7 @@ class GameRegisterHand(MainHand):
 
         query = db.GqlQuery('SELECT * FROM GameAccount WHERE game_acct_name = :1', input_game_acct_name)
 
-        if(query.count() == 0):
+        if query.count() == 0:
             new_game_acct = GameAccount(game_acct_name=input_game_acct_name, game_acct_password=input_game_acct_password)
             new_game_acct.put()
 
@@ -140,23 +140,24 @@ class GameRegisterHand(MainHand):
             new_char = Character(char_data=input_char_data, game_acct_id=game_acct_id)
             new_char.put()
 
-            game_acct_id = str(game_acct_id) #must be cast to str for logging
+            game_acct_id = str(game_acct_id)  # must be cast to str for logging
             self.write(game_acct_id)
             logging.info('Game account ' + game_acct_id + ' created')
         else:
             logging.error('Registration failed for ' + input_game_acct_name + '. game_acct_name already exists.')
             self.write('')
 
-class CharactersHand(MainHand):
-	def get(self, character_id):
-	    entity = Character.get_by_id(int(character_id))
 
-	    if(entity == None):
-	        logging.error('Character download failed. Character ' + character_id + ' does not exist in Datastore.')
-	        self.abort(404)
-	    else:
-	        self.write(entity.char_data)
-	        logging.info('Character ' + character_id  + ' downloaded')
+class CharactersHand(MainHand):
+    def get(self, character_id):
+        entity = Character.get_by_id(int(character_id))
+
+        if entity is None:
+            logging.error('Character download failed. Character ' + character_id + ' does not exist in Datastore.')
+            self.abort(404)
+        else:
+            self.write(entity.char_data)
+            logging.info('Character ' + character_id + ' downloaded')
 
 class MachineHand(MainHand):
     def post(self):
@@ -171,22 +172,25 @@ class MachineHand(MainHand):
         self.write(mach_id)
         logging.info('Machine ' + mach_id + ' created')
 
+
 class DSConnHand(MainHand):
     def get(self):
         query = Level.all()
         levels = list(query)
         self.render('dsconn.html', levels = levels)
 
+
 class UploadTestHand(MainHand):
     def get(self):
         self.render('uploadtest.html')
+
 
 app = webapp2.WSGIApplication([
     ('/?', FrontHand),
     ('/levels/?', LevelsHand),
     ('/levels/([^/]+)?', LevelsIdHand),
-    ('/gameaccount/login/?', GameLoginHand),
-    ('/gameaccount/register/?', GameRegisterHand),
+    ('/gameaccounts/login/?', GameLoginHand),
+    ('/gameaccounts/register/?', GameRegisterHand),
     ('/characters/([^/]+)?', CharactersHand),
     ('/machine/?', MachineHand),
     ('/dsconn', DSConnHand),
