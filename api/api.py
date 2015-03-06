@@ -52,12 +52,8 @@ class LevelsHand(MainHand):
             self.abort(404)
 
 class LevelsIdHand(MainHand):
-    def get(self, levelId):
-        beginning_path_len = 8 #the length of the string '/levels/'
-        total_path_len = len(self.request.path)
-        level_id = int(self.request.path[beginning_path_len:total_path_len]) #must be cast to int for query
-        entity = Level.get_by_id(level_id)
-        level_id = str(level_id) #must be cast to str for logging
+    def get(self, level_id):
+        entity = Level.get_by_id(int(level_id))
 
         if(entity == None):
             logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
@@ -152,15 +148,15 @@ class GameRegisterHand(MainHand):
             self.write('')
 
 class CharactersHand(MainHand):
-	def get(self, characterId):
-	    entity = Character.get_by_id(int(characterId))
+	def get(self, character_id):
+	    entity = Character.get_by_id(int(character_id))
 
 	    if(entity == None):
-	        logging.error('Character download failed. Character ' + characterId + ' does not exist in Datastore.')
+	        logging.error('Character download failed. Character ' + character_id + ' does not exist in Datastore.')
 	        self.abort(404)
 	    else:
 	        self.write(entity.char_data)
-	        logging.info('Character ' + characterId  + ' downloaded')
+	        logging.info('Character ' + character_id  + ' downloaded')
 
 class MachineHand(MainHand):
     def post(self):
