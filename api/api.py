@@ -151,6 +151,21 @@ class GameRegisterHand(MainHand):
             logging.error('Registration failed for ' + input_game_acct_name + '. game_acct_name already exists.')
             self.write('')
 
+class CharactersHand(MainHand):
+	def get(self, characterId):
+	    beginning_path_len = 12 #the length of the string '/characters/'
+	    total_path_len = len(self.request.path)
+	    character_id = int(self.request.path[beginning_path_len:total_path_len]) #must be cast to int for query
+	    entity = Character.get_by_id(character_id)
+	    character_id = str(character_id) #must be cast to str for logging
+
+	    if(entity == None):
+	        logging.error('Character download failed. Character ' + character_id + ' does not exist in Datastore.')
+	        self.abort(404)
+	    else:
+	        self.write(entity.char_data)
+	        logging.info('Character ' + character_id  + ' downloaded')
+
 class MachineHand(MainHand):
     def post(self):
         input_mach_name = self.request.get('mach_name')
@@ -180,6 +195,7 @@ app = webapp2.WSGIApplication([
     ('/levels/([^/]+)?', LevelsIdHand),
     ('/gameaccount/login/?', GameLoginHand),
     ('/gameaccount/register/?', GameRegisterHand),
+    ('/characters/([^/]+)?', CharactersHand),
     ('/machine/?', MachineHand),
     ('/dsconn', DSConnHand),
     ('/uploadtest', UploadTestHand)
