@@ -38,6 +38,21 @@ def editor():
 
     return dict(display_title='Level Editor', lvlId=lvlId)
 
+def media():
+
+
+    return dict(display_title= 'Media')
+
+def locations():
+
+
+    return dict(display_title= 'Locations')
+
+def blog():
+
+
+    return dict(display_title= 'Blog')
+
 def dbtest():
     q = db().select(db.Level.ALL)
     #levels = db.GqlQuery("SELECT * FROM Level ORDER BY created DESC")
