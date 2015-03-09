@@ -26,7 +26,7 @@ def index():
     if auth.user:
         msg = A('Edit your level', _class='btn', _href=URL('default', 'editor'))
     else:
-        msg = "Please login to edit your level!";
+        msg = "Please login or register to edit your level!";
 
     return dict(message=T('Hello World'), msg=msg)
 
