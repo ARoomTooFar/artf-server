@@ -47,11 +47,11 @@ class LevelsHand(MainHand):
                 self.write(new_level_id)
                 logging.info('Level ' + new_level_id + ' created')
             else:
+                self.write('')
                 logging.error('Level upload failed. game_acct_id or mach_id cannot be 0.')
-                self.abort(404)
         else:
+            self.write('')
             logging.error('Level upload failed. game_acct_id and mach_id must be numbers.')
-            self.abort(404)
 
 
 class LevelsIdHand(MainHand):
@@ -59,8 +59,8 @@ class LevelsIdHand(MainHand):
         entity = Level.get_by_id(int(level_id))
 
         if entity is None:
+            self.write('')
             logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
-            self.abort(404)
         else:
             self.write(entity.live_level_data)
             logging.info('Level ' + level_id  + ' downloaded')
@@ -74,8 +74,8 @@ class LevelsIdHand(MainHand):
         entity = Level.get_by_id(int(level_id))
 
         if entity is None:
+            self.write('')
             logging.error('Level manipulation failed. Level does not exist in Datastore.')
-            self.abort(404)
         else:
             if flag == 'update':
                 if game_acct_id_str != '':
@@ -92,8 +92,8 @@ class LevelsIdHand(MainHand):
                 self.write(level_id)
                 logging.info('Level ' + level_id + ' deleted')
             else:
+                self.write('')
                 logging.error('Level manipulation failed. No manipulation flag set.')
-                self.abort(404)
 
 
 class GameLoginHand(MainHand):
@@ -153,8 +153,8 @@ class CharactersHand(MainHand):
         entity = Character.get_by_id(int(character_id))
 
         if entity is None:
+            self.write('')
             logging.error('Character download failed. Character ' + character_id + ' does not exist in Datastore.')
-            self.abort(404)
         else:
             self.write(entity.char_data)
             logging.info('Character ' + character_id + ' downloaded')
@@ -165,8 +165,8 @@ class CharactersHand(MainHand):
         entity = Character.get_by_id(int(character_id))
 
         if entity is None:
+            self.write('')
             logging.error('Character update failed. Character does not exist in Datastore.')
-            self.abort(404)
         else:
             if char_data != '':
                 entity.char_data = char_data
@@ -174,8 +174,8 @@ class CharactersHand(MainHand):
                 self.write(character_id)
                 logging.info('Character ' + character_id + ' updated')
             else:
+                self.write('')
                 logging.error('Character update failed. Character ' + character_id + ' cannot have empty character data.')
-                self.abort(404)
 
 
 class MachineHand(MainHand):
