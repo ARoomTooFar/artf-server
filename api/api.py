@@ -113,8 +113,9 @@ class GameLoginHand(MainHand):
                     logging.error('Character download for game account ' + game_acct_id +' failed. Character doesn\'t exist for game account.')
                     self.write('')
                 else:
-                    self.write(entity.char_data)
-                    logging.info('Game account ' + game_acct_id + ' logged in') #post location and maybe account name later
+                    char_id = str(entity.key().id())
+                    self.write(char_id)
+                    logging.info('Character ' + char_id + ' logged in') #post location and maybe account name later
             else:
                 self.write('')
                 logging.info('Login failed for game account ' + game_acct_id + '. Password incorrect.')
@@ -211,7 +212,7 @@ app = webapp2.WSGIApplication([
     ('/gameaccounts/login/?', GameLoginHand),
     ('/gameaccounts/register/?', GameRegisterHand),
     ('/characters/([^/]+)?', CharactersHand),
-    ('/machine/?', MachineHand),
+    ('/machines/?', MachineHand),
     ('/dsconn', DSConnHand),
     ('/uploadtest', UploadTestHand)
 ], debug=True)
