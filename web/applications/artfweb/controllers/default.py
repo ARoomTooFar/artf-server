@@ -92,8 +92,19 @@ def user():
     return dict(form=form)
 
 def register():
-    return dict(form=auth.register())
+    form = SQLFORM.factory(
+        Field('input_first_name', 'string', label = 'First name', requires = IS_NOT_EMPTY()),
+        Field('input_last_name', 'string', label = 'Last name', requires = IS_NOT_EMPTY()),
+        Field('input_email', 'string', label = 'Email', requires = IS_EMAIL()),
+        Field('input_password', 'password', label = 'Password', requires = IS_NOT_EMPTY()),
+        Field('input_password_confirm', 'password', label = 'Confirm password', requires=IS_EXPR('value==%s' % repr(request.vars.get('input_password', None)), error_message="Password fields don't match"))
+    )
 
+    if form.process().accepted:
+        session.flash = T('teehee')
+        #db.revision.insert(pageid = page_id, body = request.vars['input_body'], rev_comment = request.vars['input_comment'])
+
+    return dict(form=form)
 
 @cache.action()
 def download():
