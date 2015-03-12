@@ -87,6 +87,7 @@ def workshop():
         if request.args(1) is not None:
             page_title = 'Level Editor'
             lvlId = request.args(1)
+            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
             response.view = request.controller + '/leveleditor.html'
         
         # /workshop/levels

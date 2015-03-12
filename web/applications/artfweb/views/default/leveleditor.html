@@ -1,3 +1,7 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<h1>{{=page_title}}</h1>
 <script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
 <script type="text/javascript">
 <!--
@@ -115,6 +119,7 @@ div#unityPlayer {
 -->
 </style>
 <p class="header"><span>Unity Web Player | </span>Level Edibutts</p>
+{{=btnLevels}}
 <div class="content">
     <div id="unityPlayer">
         <div class="missing">

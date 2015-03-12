@@ -25,7 +25,7 @@ class MainHand(webapp2.RequestHandler):
 
 class FrontHand(MainHand):
     def get(self):
-        self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.3</body></html>')
+        self.write('<html><head><title>ARTF API</title></head><body>ARTF API 0.0.4</body></html>')
 
 
 class LevelsHand(MainHand):
