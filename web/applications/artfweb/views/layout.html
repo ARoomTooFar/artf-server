@@ -7,6 +7,7 @@
 <!--[if IE 9]><html class="ie9 ie-lte9 no-js" lang="{{=T.accepted_language or 'en'}}"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
 <head>
+  
 <title>{{=response.title or request.application}}</title>
   <!--[if !HTML5]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge{{=not request.is_local and ',chrome=1' or ''}}">
@@ -123,8 +124,12 @@
         {{if right_sidebar_enabled:}}
         <div class="span3">
             {{block right_sidebar}}
-            <h3>Right Sidebar</h3>
+            <h3>Menu</h3>
             <p>LELAND SENPAI NOTICE ME UGUUU~~</p>
+            <p> <a href="media.html">Media</a> </p>
+            <p> <a href="locations.html">Locations</a> </p>
+            <p> <a href="blog.html">Blog</a> </p>
+
             {{end}}
         </div>
         {{pass}}
