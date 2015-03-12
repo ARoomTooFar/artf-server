@@ -84,23 +84,13 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
+
+    if 'register' in request.args:
+        field_game_acct_id = db.auth_user['game_acct_id']
+        field_game_acct_id.readable = False
+        field_game_acct_id.writable = False
+
     return dict(form=auth())
-
-def register():
-    form = SQLFORM.factory(
-        Field('input_first_name', 'string', label = 'First name', requires = IS_NOT_EMPTY()),
-        Field('input_last_name', 'string', label = 'Last name', requires = IS_NOT_EMPTY()),
-        Field('input_email', 'string', label = 'Email', requires = IS_EMAIL()),
-        Field('input_password', 'password', label = 'Password', requires = IS_NOT_EMPTY()),
-        Field('input_password_confirm', 'password', label = 'Confirm password', requires=IS_EXPR('value==%s' % repr(request.vars.get('input_password', None)), error_message='Password fields don\'t match'))
-    )
-
-    if form.process().accepted:
-        session.flash = T('Registration successful')
-        db.auth_user.insert(first_name = request.vars['input_first_name'], last_name = request.vars['input_last_name'], email = request.vars['input_email'], password = db.auth_user.password.validate(request.vars['input_password']))
-        redirect(URL('default', 'register'))
-
-    return dict(form=form)
 
 @cache.action()
 def download():
