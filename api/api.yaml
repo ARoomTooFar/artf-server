@@ -1,6 +1,6 @@
 application: artf-server
 module: api
-version: 0-0-3
+version: 0-0-4
 runtime: python27
 api_version: 1
 threadsafe: yes

@@ -24,7 +24,7 @@ def index():
     response.flash = T("Welcome to web2py!")
 
     if auth.user:
-        msg = A('Edit your level', _class='btn', _href=URL('default', 'editor'))
+        msg = A('Workshop', _class='btn', _href=URL('default', 'workshop'))
     else:
         msg = "Please login or register to edit your level!";
 
@@ -73,17 +73,37 @@ def dbinput():
 def workshop():
     btnLevels = None
     levelsList = None
+    lvlId = 0
 
     # /workshop
     if request.args(0) is None:
         page_title = 'Workshop'
-        btnLevels = A('Your levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
-    # /workshop/levels
+        btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+    
     elif request.args(0) == 'levels':
-        page_title = 'Your levels'
-        levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create = False, editable = False, deletable = False, details = False, csv = False, user_signature = False)
+        
+        # /workshop/levels/[LEVELID]
+        # need to add in security here later so people can't edit other people's levels
+        if request.args(1) is not None:
+            page_title = 'Level Editor'
+            lvlId = request.args(1)
+            response.view = request.controller + '/leveleditor.html'
+        
+        # /workshop/levels
+        else:
+            page_title = 'Your Levels'
 
-    return dict(page_title=page_title, btnLevels=btnLevels, levelsList=levelsList)
+            def create_btnEditLvl(row):
+                btnEditLvl = A('Edit Level', _class='btn', _href=URL('default', 'workshop', args=['levels', row.id]))
+                return btnEditLvl
+
+            links = [
+                dict(header='', body=create_btnEditLvl)
+            ]
+
+            levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, links=links)
+
+    return dict(page_title=page_title, btnLevels=btnLevels, levelsList=levelsList, lvlId=lvlId)
 
 def user():
     """
