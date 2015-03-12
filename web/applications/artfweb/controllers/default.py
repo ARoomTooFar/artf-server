@@ -69,7 +69,15 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
-    return dict(form=auth())
+    form = auth()
+
+    if form.process().accepted:
+        session.flash = T('teehee')
+
+    return dict(form=form)
+
+def register():
+    return dict(form=auth.register())
 
 
 @cache.action()
