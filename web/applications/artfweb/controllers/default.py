@@ -28,7 +28,7 @@ def index():
     else:
         msg = "Please login or register to edit your level!";
 
-    return dict(message=T('Hello World'), msg=msg)
+    return dict(message=T('A Room Too Far Web Server'), msg=msg)
 
 def editor():
     if auth.user:
