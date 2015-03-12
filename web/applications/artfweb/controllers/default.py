@@ -69,6 +69,22 @@ def dbinput():
 
     return dict(display_title='DB Input', form=form)
 
+@auth.requires_login()
+def workshop():
+    btnLevels = None
+    levelsList = None
+
+    # /workshop
+    if request.args(0) is None:
+        page_title = 'Workshop'
+        btnLevels = A('Your levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+    # /workshop/levels
+    elif request.args(0) == 'levels':
+        page_title = 'Your levels'
+        levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create = False, editable = False, deletable = False, details = False, csv = False, user_signature = False)
+
+    return dict(page_title=page_title, btnLevels=btnLevels, levelsList=levelsList)
+
 def user():
     """
     exposes:
