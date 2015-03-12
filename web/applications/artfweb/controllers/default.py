@@ -26,9 +26,9 @@ def index():
     if auth.user:
         msg = A('Edit your level', _class='btn', _href=URL('default', 'editor'))
     else:
-        msg = "Please login to edit your level!";
+        msg = "Please login or register to edit your level!";
 
-    return dict(message=T('Hello World'), msg=msg)
+    return dict(message=T('A Room Too Far Web Server'), msg=msg)
 
 def editor():
     if auth.user:
@@ -37,6 +37,21 @@ def editor():
         lvlId = '0';
 
     return dict(display_title='Level Editor', lvlId=lvlId)
+
+def media():
+
+
+    return dict(display_title= 'Media')
+
+def locations():
+
+
+    return dict(display_title= 'Locations')
+
+def blog():
+
+
+    return dict(display_title= 'Blog')
 
 def dbtest():
     q = db().select(db.Level.ALL)
