@@ -76,7 +76,7 @@ def webgl():
 def workshop():
     btnLevels = None
     levelsList = None
-    lvlId = 0
+    ids = '0'
 
     # /workshop
     if request.args(0) is None:
@@ -89,7 +89,7 @@ def workshop():
         # need to add in security here later so people can't edit other people's levels
         if request.args(1) is not None:
             page_title = 'Level Editor'
-            lvlId = request.args(1)
+            ids = str(auth.user.game_acct_id) + ',' + request.args(1)
             btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
             response.view = request.controller + '/leveleditor.html'
         
@@ -107,7 +107,7 @@ def workshop():
 
             levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, links=links)
 
-    return dict(page_title=page_title, btnLevels=btnLevels, levelsList=levelsList, lvlId=lvlId)
+    return dict(page_title=page_title, btnLevels=btnLevels, levelsList=levelsList, ids=ids)
 
 def user():
     """
