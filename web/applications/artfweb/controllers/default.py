@@ -69,6 +69,9 @@ def dbinput():
 
     return dict(display_title='DB Input', form=form)
 
+def webgl():
+    return dict()
+
 @auth.requires_login()
 def workshop():
     btnLevels = None
