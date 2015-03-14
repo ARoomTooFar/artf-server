@@ -144,7 +144,7 @@ def workshop():
                 dict(header='', body=create_btnDelLevel)
             ]
 
-            levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, links=links)
+            levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, sortable=False, orderby=db.Level.created, links=links)
 
     return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form, levelData=levelData)
 
