@@ -79,6 +79,7 @@ def workshop():
     levelsList = None
     form = None
     ids = '0'
+    levelData = None
 
     # /workshop
     if request.args(0) is None:
@@ -86,18 +87,6 @@ def workshop():
         btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
     
     elif request.args(0) == 'levels':
-        
-        # /workshop/levels/add
-        if request.args(1) == 'add':
-            page_title = 'New Level'
-
-            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
-            form = FORM.confirm('Do you want to create a new level?')
-
-            if form.accepted:
-                db.Level.insert(live_level_data='', draft_level_data='', game_acct_id=auth.user.game_acct_id, mach_id=123)
-                session.flash = T('New level created!')
-                redirect(URL('default', 'workshop', args=['levels']))
 
         # /workshop/levels/[LEVELID]/del
         if str(request.args(1)).isdigit() and request.args(2) == 'del':
@@ -117,7 +106,24 @@ def workshop():
             page_title = 'Level Editor'
             ids = str(auth.user.game_acct_id) + ',' + request.args(1)
             btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+
+            # get level data for debugging purposes
+            entity = db(db.Level.id == request.args(1)).select().first()
+            levelData = entity.live_level_data
+
             response.view = request.controller + '/leveleditor.html'
+
+        # /workshop/levels/add
+        elif request.args(1) == 'add':
+            page_title = 'New Level'
+
+            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+            form = FORM.confirm('Do you want to create a new level?')
+
+            if form.accepted:
+                db.Level.insert(live_level_data='', draft_level_data='', game_acct_id=auth.user.game_acct_id, mach_id=123)
+                session.flash = T('New level created!')
+                redirect(URL('default', 'workshop', args=['levels']))
 
         # /workshop/levels
         else:
@@ -140,7 +146,7 @@ def workshop():
 
             levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, links=links)
 
-    return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form)
+    return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form, levelData=levelData)
 
 def user():
     """
