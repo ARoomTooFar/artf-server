@@ -121,8 +121,8 @@ def workshop():
             form = FORM.confirm('Do you want to create a new level?')
 
             if form.accepted:
-                db.Level.insert(live_level_data='', draft_level_data='', game_acct_id=auth.user.game_acct_id, mach_id=123)
-                session.flash = T('New level created!')
+                levelId = db.Level.insert(live_level_data='MapData Terrain Room rooms: Scenery Monster', draft_level_data='MapData Terrain Room rooms: Scenery Monster', game_acct_id=auth.user.game_acct_id, mach_id=123)
+                session.flash = T('New level ' + str(levelId) + ' created!')
                 redirect(URL('default', 'workshop', args=['levels']))
 
         # /workshop/levels
