@@ -75,7 +75,9 @@ def webgl():
 @auth.requires_login()
 def workshop():
     btnLevels = None
+    btnAddLevel = None
     levelsList = None
+    form = None
     ids = '0'
 
     # /workshop
@@ -85,29 +87,60 @@ def workshop():
     
     elif request.args(0) == 'levels':
         
+        # /workshop/levels/add
+        if request.args(1) == 'add':
+            page_title = 'New Level'
+
+            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+            form = FORM.confirm('Do you want to create a new level?')
+
+            if form.accepted:
+                db.Level.insert(live_level_data='', draft_level_data='', game_acct_id=auth.user.game_acct_id, mach_id=123)
+                session.flash = T('New level created!')
+                redirect(URL('default', 'workshop', args=['levels']))
+
+        # /workshop/levels/[LEVELID]/del
+        if str(request.args(1)).isdigit() and request.args(2) == 'del':
+            page_title = 'Delete Level'
+
+            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+            form = FORM.confirm('Are you sure you want to delete your level?')
+
+            if form.accepted:
+                db(db.Level.id == request.args(1)).delete()
+                session.flash = T('Level ' + str(request.args(1)) + ' deleted')
+                redirect(URL('default', 'workshop', args=['levels']))
+
         # /workshop/levels/[LEVELID]
         # need to add in security here later so people can't edit other people's levels
-        if request.args(1) is not None:
+        elif str(request.args(1)).isdigit():
             page_title = 'Level Editor'
             ids = str(auth.user.game_acct_id) + ',' + request.args(1)
             btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
             response.view = request.controller + '/leveleditor.html'
-        
+
         # /workshop/levels
         else:
             page_title = 'Your Levels'
 
-            def create_btnEditLvl(row):
-                btnEditLvl = A('Edit Level', _class='btn', _href=URL('default', 'workshop', args=['levels', row.id]))
-                return btnEditLvl
+            btnAddLevel = A('Add Level', _class='btn', _href=URL('default', 'workshop', args=['levels', 'add']))
+
+            def create_btnEditLevel(row):
+                btnEditLevel = A('Edit Level', _class='btn', _href=URL('default', 'workshop', args=['levels', row.id]))
+                return btnEditLevel
+
+            def create_btnDelLevel(row):
+                btnDelLevel = A('Delete Level', _class='btn', _href=URL('default', 'workshop', args=['levels', row.id, 'del']))
+                return btnDelLevel
 
             links = [
-                dict(header='', body=create_btnEditLvl)
+                dict(header='', body=create_btnEditLevel),
+                dict(header='', body=create_btnDelLevel)
             ]
 
             levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, links=links)
 
-    return dict(page_title=page_title, btnLevels=btnLevels, levelsList=levelsList, ids=ids)
+    return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form)
 
 def user():
     """
