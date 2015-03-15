@@ -9,6 +9,12 @@ db.define_table('Level',
     Field('modified', 'datetime')
 )
 
+db.define_table('blog',
+	Field('post_title', 'string'),
+	Field('authour', 'string'),
+	Field('date_posted', 'datetime'),
+	Field('postbody', 'text'))
+
 db.Level.game_acct_id.required = True
 db.Level.mach_id.required = True
 db.Level.created.default = datetime.utcnow()
