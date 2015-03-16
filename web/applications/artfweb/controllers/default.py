@@ -99,28 +99,28 @@ def workshop():
 
     # /workshop
     if request.args(0) is None:
-        redirect(URL('default', 'workshop', args=['levels']))
+        redirect(URL('default', 'workshop', args=['zones']))
     
-    elif request.args(0) == 'levels':
+    elif request.args(0) == 'zones':
 
         # /workshop/levels/[LEVELID]/del
         if str(request.args(1)).isdigit() and request.args(2) == 'del':
-            page_title = 'Delete Level'
+            page_title = 'Delete Zone'
 
-            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+            btnLevels = A('Your Zones', _class='btn', _href=URL('default', 'workshop', args=['zones']))
             form = FORM.confirm('Are you sure you want to delete your level?')
 
             if form.accepted:
                 db(db.Level.id == request.args(1)).delete()
                 session.flash = T('Level ' + str(request.args(1)) + ' deleted')
-                redirect(URL('default', 'workshop', args=['levels']))
+                redirect(URL('default', 'workshop', args=['zones']))
 
         # /workshop/levels/[LEVELID]
         # need to add in security here later so people can't edit other people's levels
         elif str(request.args(1)).isdigit():
-            page_title = 'Level Editor'
+            page_title = 'Zone Editor'
             ids = str(auth.user.game_acct_id) + ',' + request.args(1)
-            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+            btnLevels = A('Your Zones', _class='btn', _href=URL('default', 'workshop', args=['zones']))
 
             # get level data for debugging purposes
             entity = db(db.Level.id == request.args(1)).select().first()
@@ -130,39 +130,29 @@ def workshop():
 
         # /workshop/levels/add
         elif request.args(1) == 'add':
-            page_title = 'New Level'
+            page_title = 'New Zone'
 
-            btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+            btnLevels = A('Your Zones', _class='btn', _href=URL('default', 'workshop', args=['zones']))
             form = FORM.confirm('Do you want to create a new level?')
 
             if form.accepted:
                 levelId = db.Level.insert(live_level_data='MapData Terrain Room rooms: Scenery Monster', draft_level_data='MapData Terrain Room rooms: Scenery Monster', game_acct_id=auth.user.game_acct_id, mach_id=123)
                 session.flash = T('New level ' + str(levelId) + ' created!')
-                redirect(URL('default', 'workshop', args=['levels']))
+                redirect(URL('default', 'workshop', args=['zones']))
 
-        # /workshop/levels
+        # /workshop/zones
         else:
             response.view = request.controller + '/zonelist.html'
-            page_title = 'Your Levels'
+            page_title = 'Your Zones'
 
-            btnAddLevel = A('Add Level', _class='btn', _href=URL('default', 'workshop', args=['levels', 'add']))
+            query = db(db.Level.game_acct_id == auth.user.game_acct_id).select()
 
-            def create_btnEditLevel(row):
-                btnEditLevel = A('Edit Level', _class='btn', _href=URL('default', 'workshop', args=['levels', row.id]))
-                return btnEditLevel
+            levelsList = []
 
-            def create_btnDelLevel(row):
-                btnDelLevel = A('Delete Level', _class='btn', _href=URL('default', 'workshop', args=['levels', row.id, 'del']))
-                return btnDelLevel
+            for entity in query:
+                levelsList.append({'id': entity.id, 'live_level_data': entity.live_level_data})
 
-            links = [
-                dict(header='', body=create_btnEditLevel),
-                dict(header='', body=create_btnDelLevel)
-            ]
-
-            levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, sortable=False, orderby=db.Level.created, links=links)
-
-    return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form, levelData=levelData, inWorkshop=True)
+            return dict(levelsList=levelsList)
 
 def user():
     """
