@@ -126,7 +126,7 @@ def workshop():
             entity = db(db.Level.id == request.args(1)).select().first()
             levelData = entity.live_level_data
 
-            response.view = request.controller + '/leveleditor.html'
+            response.view = request.controller + '/zoneeditor.html'
 
         # /workshop/levels/add
         elif request.args(1) == 'add':
