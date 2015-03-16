@@ -53,7 +53,8 @@ def blog():
     form = SQLFORM(db.blog)
     form.add_button('Add', URL('add'))
 
-    return  dict(posts=db().select(db.blog.ALL))
+    return  dict(form=form)
+    #return dict()
 
 def add():
     form = SQLFORM(db.blog)
