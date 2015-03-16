@@ -33,7 +33,7 @@
             <span class="icon-bar"></span>
           </button>
           {{pass}}
-          <a class="navbar-brand" href="#">A Room Too Far</a>
+          {{=A(IMG(_src=URL('static','images/logo.png'), _alt="A Room Too Far", _class="logo"), _href=URL('default','workshop'))}}
         </div>
         {{if auth.user is None:}}
         <div id="navbar" class="navbar-collapse collapse">
