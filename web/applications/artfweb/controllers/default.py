@@ -103,7 +103,7 @@ def workshop():
     
     elif request.args(0) == 'zones':
 
-        # /workshop/levels/[LEVELID]/del
+        # /workshop/zones/[LEVELID]/del
         if str(request.args(1)).isdigit() and request.args(2) == 'del':
             page_title = 'Delete Zone'
 
@@ -115,23 +115,20 @@ def workshop():
                 session.flash = T('Level ' + str(request.args(1)) + ' deleted')
                 redirect(URL('default', 'workshop', args=['zones']))
 
-        # /workshop/levels/[LEVELID]
+        # /workshop/zones/[LEVELID]
         # need to add in security here later so people can't edit other people's levels
         elif str(request.args(1)).isdigit():
-            page_title = 'Zone Editor'
             ids = str(auth.user.game_acct_id) + ',' + request.args(1)
-            btnLevels = A('Your Zones', _class='btn', _href=URL('default', 'workshop', args=['zones']))
 
             # get level data for debugging purposes
             entity = db(db.Level.id == request.args(1)).select().first()
             levelData = entity.live_level_data
 
             response.view = request.controller + '/zoneeditor.html'
+            return dict(ids=ids)
 
-        # /workshop/levels/add
+        # /workshop/zones/add
         elif request.args(1) == 'add':
-            page_title = 'New Zone'
-
             btnLevels = A('Your Zones', _class='btn', _href=URL('default', 'workshop', args=['zones']))
             form = FORM.confirm('Do you want to create a new level?')
 
@@ -153,6 +150,8 @@ def workshop():
                 levelsList.append({'id': entity.id, 'live_level_data': entity.live_level_data})
 
             return dict(levelsList=levelsList)
+
+    return dict()
 
 def user():
     """

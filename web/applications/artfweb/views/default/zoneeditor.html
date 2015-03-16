@@ -1,4 +1,7 @@
-{{page_title = 'Zone Editor'}}
+{{
+    page_title = 'Zone Editor'
+    inWorkshop = True
+}}
 {{extend 'base.html'}}
 
 <h1>{{=page_title}}</h1>
@@ -123,7 +126,6 @@ div#unityPlayer {
 </head>
 <body>
     <p class="header"><span>Unity Web Player | </span>artf-level-editor</p>
-    {{=btnLevels}}
     <div class="content">
         <div id="unityPlayer">
             <div class="missing">
@@ -139,4 +141,3 @@ div#unityPlayer {
         </div>
     </div>
     <p class="footer">&laquo; created with <a href="http://unity3d.com/unity/" title="Go to unity3d.com">Unity</a> &raquo;</p>
-    <p>{{=levelData}}</p>
