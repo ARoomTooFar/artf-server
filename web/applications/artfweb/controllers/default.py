@@ -28,8 +28,6 @@ def index():
     else:
         msg = "Please login or register to edit your level!";
 
-    loggedin = True
-
     return dict(inWorkshop=False)
 
 def editor():
@@ -101,8 +99,7 @@ def workshop():
 
     # /workshop
     if request.args(0) is None:
-        page_title = 'Workshop'
-        btnLevels = A('Your Levels', _class='btn', _href=URL('default', 'workshop', args=['levels']))
+        redirect(URL('default', 'workshop', args=['levels']))
     
     elif request.args(0) == 'levels':
 
@@ -145,6 +142,7 @@ def workshop():
 
         # /workshop/levels
         else:
+            response.view = request.controller + '/zonelist.html'
             page_title = 'Your Levels'
 
             btnAddLevel = A('Add Level', _class='btn', _href=URL('default', 'workshop', args=['levels', 'add']))

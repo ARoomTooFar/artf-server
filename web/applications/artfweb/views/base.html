@@ -44,13 +44,14 @@
         {{else:}}
         <div class="dropdown navbar-right">
           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-            {{print('adfsaksdfhadklghdfjklghjdkghjldsghjkldsghjkdlshgl')
-            print(auth.user)}}
             {{=auth.user.first_name}}
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="/user">Profile</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="/workshop">Workshop</a></li>
+             <li role="presentation"><a role="menuitem" tabindex="-1" href="/">Main Site</a></li>
+            <li role="presentation" class="divider"></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/profile">Account Settings</a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/logout">Logout</a></li>
           </ul>
         </div>
@@ -67,9 +68,11 @@
           {{include 'default/sidebar-guest.html'}}
           {{pass}}
         </div>
-        {{block center}}
-        {{include}}
-        {{end}}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          {{block center}}
+          {{include}}
+          {{end}}
+        </div>
       </div>
     </div>
 
