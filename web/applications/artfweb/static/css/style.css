@@ -103,3 +103,12 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+/* CUSTOM STYLES START HERE */
+.navbar-inverse {
+  background-color: #13171c;
+}
+
+.sidebar {
+  background-color: #2d3137;
+}
