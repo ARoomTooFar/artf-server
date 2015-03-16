@@ -50,8 +50,24 @@ def locations():
 
 def blog():
 
+    form = SQLFORM(db.blog)
+    form.add_button('Add', URL('add'))
 
-    return dict(display_title= 'Blog')
+    return  dict(form=form)
+    #return dict()
+
+def add():
+    form = SQLFORM(db.blog)
+    if form.process().accepted:
+        session.flash = T('Posted')
+        redirect(URL('default','blog'))
+    return dict(form=form)
+
+def view():
+    p = db.blog(request.args(0)) or redirect(URL('default', 'index'))
+    form = SQLFORM(db.blog,readonly=True)
+    return dict(form=form)
+
 
 def dbtest():
     q = db().select(db.Level.ALL)
