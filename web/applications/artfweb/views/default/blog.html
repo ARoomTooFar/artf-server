@@ -1,5 +1,11 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-{{=form}}
+
+({{=A('Add', _href=URL('default', 'add'))}})
+{{pass}}
+{{for p in posts: }}
+<h1>{{=p.post_title}}</h1>
+Posted by {{=p.authour}}, posted on {{=p.date_posted}}
+<p>{{=p.postbody}} </p>
 {{pass}}

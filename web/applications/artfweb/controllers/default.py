@@ -50,11 +50,13 @@ def locations():
 
 def blog():
 
-    form = SQLFORM(db.blog)
-    form.add_button('Add', URL('add'))
+    #form = SQLFORM(db.blog)
+    #form.add_button('Add', URL('add'))
 
-    return  dict(form=form)
-    #return dict()
+    posts = db().select(db.blog.ALL)
+
+    #return  dict(form=form)
+    return dict(posts=posts)
 
 def add():
     form = SQLFORM(db.blog)
