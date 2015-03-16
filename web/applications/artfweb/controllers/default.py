@@ -28,9 +28,9 @@ def index():
     else:
         msg = "Please login or register to edit your level!";
 
-    loggedin = False
+    loggedin = True
 
-    return dict(loggedin=loggedin)
+    return dict(inWorkshop=False)
 
 def editor():
     if auth.user:
@@ -164,7 +164,7 @@ def workshop():
 
             levelsList = SQLFORM.grid(db.Level.game_acct_id == auth.user.game_acct_id, create=False, editable=False, deletable=False, details=False, csv=False, user_signature=False, sortable=False, orderby=db.Level.created, links=links)
 
-    return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form, levelData=levelData)
+    return dict(page_title=page_title, btnLevels=btnLevels, btnAddLevel=btnAddLevel, levelsList=levelsList, ids=ids, form=form, levelData=levelData, inWorkshop=True)
 
 def user():
     """
