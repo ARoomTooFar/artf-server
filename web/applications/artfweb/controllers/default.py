@@ -57,6 +57,7 @@ def blog():
     #return  dict(form=form)
     return dict(posts=posts)
 
+@auth.requires_login()
 def add():
     #form = SQLFORM(db.blog)
     form = SQLFORM.factory(
