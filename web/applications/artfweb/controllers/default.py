@@ -50,17 +50,28 @@ def locations():
 
 def blog():
 
-    form = SQLFORM(db.blog)
-    form.add_button('Add', URL('add'))
+    #form = SQLFORM(db.blog)
+    #form.add_button('Add', URL('add'))
+    posts = db().select(db.blog.ALL, orderby = ~db.blog.date_posted)
 
-    return  dict(form=form)
-    #return dict()
+    #return  dict(form=form)
+    return dict(posts=posts)
 
 def add():
-    form = SQLFORM(db.blog)
+    #form = SQLFORM(db.blog)
+    form = SQLFORM.factory(
+        Field('post_title', 'string', requires=IS_NOT_EMPTY(error_message='Field is empty !'), label='Title'),
+        Field('authour', 'string', requires=IS_NOT_EMPTY(error_message='Field is empty !'), label='Authour'),
+        Field('date_posted', 'datetime', label='Date Posted'),
+        Field('postbody', 'text', requires=IS_NOT_EMPTY(error_message='Field is empty !'), label='Body')
+    )
+
     if form.process().accepted:
-        session.flash = T('Posted')
+
+        db.blog.insert(**form.vars)
+        response.flash = T('Announcement posted')
         redirect(URL('default','blog'))
+
     return dict(form=form)
 
 def view():
