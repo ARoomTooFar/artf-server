@@ -1,23 +1,40 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
+<style>
+body{background-color:#2c3e50}
+h1{color:white}
+h2{color:white}
+h3{color:white}
+p{color:white}
+</style>
+<!--Changed background color-->
+<!--Changed text color-->
 <title>A Room Too Far Media</title>
 
 
-<h3> A Room Too Far Media </h3> 
 
-<h3>Gameplay Video (In Progress)<h3> 
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/FOUbCP_nqSU" frameborder="0" allowfullscreen></iframe></p>
+
+<h3>A Room Too Far Media</h3> 
 
 <h3> Art Concepts </h3> 
-<p> Foliant Fodder </p> 
-<img src="/{{=response.title}}/static/images/foliantFodder.jpg" width="600" height = "400" alt="UCSC Slugs Rule Yo" /  ></a>
-<p> Foliant Hive </p> 
-<img src="/{{=response.title}}/static/images/foliantHive.jpg" width="600" height = "400" alt="UCSC Slugs Rule Yo" /  ></a>
-<p>Cacklebranch </p> 
-<img src="/{{=response.title}}/static/images/cacklebranch.jpg" width="600" height = "400" alt="UCSC Slugs Rule Yo" /  ></a>
-<p>Fong Bully Trunk </p> 
-<img src="/{{=response.title}}/static/images/fongBullyTrunk.jpg" width="600" height = "400" alt="UCSC Slugs Rule Yo" /  ></a>
-
+<div style="margin-bottom:5px">
+<a href="/{{=response.title}}/static/images/cablemaw.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/cablemaw.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/cablevine.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/cablevine.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/cacklebranch.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/cacklebranch.png" width="300" height="300"" alt="Characters"> </a>
+</div>
+<div style="margin-bottom:5px"> 
+<a href="/{{=response.title}}/static/images/delversduster.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/delversduster.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/delversduster2.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/delversduster2.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/foliantfodder.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/foliantfodder.png" width="300" height="300"" alt="Characters"> </a>
+</div>
+<div style="margin-bottom:5px">
+<a href="/{{=response.title}}/static/images/folianthive.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/folianthive.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/ingameconcept.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/ingameconcept.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/miragehologram.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/miragehologram.png" width="300" height="300"" alt="Characters"> </a>
+</div>
+<a href="/{{=response.title}}/static/images/miragephysical.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/miragephysical.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/smugglersjacket.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/smugglersjacket.png" width="300" height="300"" alt="Characters"> </a>
+<a href="/{{=response.title}}/static/images/titlebackground.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/titlebackground.png" width="300" height="300"" alt="Characters"> </a>
 
 {{if 'message' in globals():}}
 <h3>{{=message}}</h3>

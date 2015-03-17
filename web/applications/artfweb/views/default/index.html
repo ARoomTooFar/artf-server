@@ -1,8 +1,40 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
+<style>
+body{background-color:#2c3e50}
+h1{color:white}
+h2{color:white}
+h3{color:white}
+p{color:white}
+</style>
+<!--Changed background color-->
+<!--Changed text color-->
 
-{{=A(IMG(_src=URL('static','images/artf.jpg'), _alt="Our Logo"), _href=URL('default','index'))}}
-<h3> A Room Too Far Releases June 2015 </h3> 
+
+<style>
+body{background-color:#34495e}
+</style>
+<!--Changed background color-->
+
+<!-- {{=A(IMG(_src=URL('static','images/artf.jpg'), _alt="Our Logo"), _href=URL('default','index'))}} -->
+<p> <div style="color:white; font-size:x-large">Gameplay Video (In Progress)</div> </p>
+<p> <iframe width="850" height="500" src="https://www.youtube.com/embed/FOUbCP_nqSU" frameborder="0" allowfullscreen></iframe> </p>
+<p> <div style = "font-size:large; color:white;"> WHAT IS A ROOM TOO FAR? </div> </p>
+<div style = "color:white;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A Room Too Far is a cooperative dungeon crawler with a persistent user-generated world on an arcade machine. 
+Dungeons are created on a companion website, then downloaded to the machine. 
+Players find themselves in a cyberpunk jungle imperiled by rampant growth. Each arcade machine contains a distinct, evolving world.
+A Room Too Far is being developed in the Computer Game Design program at the University of California, Santa Cruz and is scheduled to release in June 2015.</div> 
+<p> <div style = "font-size:large; color:white;"> THE STORY SO FAR… </div> </p>
+<div style = "color:white;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There were once a prosperous civilization. The bountiful land overflowed with resources, propelling it rapidly through the ages. 
+However, the land also takes as it pleases. The Jungle has inexplicably emerged across the planet, even from places that were without the tiniest hint of foliage. 
+This vegetation swiftly flooded and devoured the cities with great ferocity. The people of the land scrambled to build skyward, in hopes of relief.
+The safety of the clouds was not to last. The vicious vegetation chased them until they could build no longer. Out of desperation they raised the cities and surrounding lands into the sky. 
+The surface of the planet was torn asunder. Again they were safe, but only for a time… The Jungle did not relent. One by one the brambles and branches began to pull their grand cities back down to the earth. 
+In a final act of desperation they did the only thing they could: burn it to the ground. The shining metal husks of their towers were the only thing left standing amongst the ashes. Their precious ground freed.
+The cycle continues to this day. A cycle of ascension, reconstruction, survival, descent, and immolation. Adventurers delve into the ruins of their forsaken cities to gain wealth, power, and resources for themselves and their civilization.
+ The world keeps growing as delvers seek salvation, a salvation that is always a room too far.</div>
 {{if 'message' in globals():}}
 <h3>{{=message}}</h3>
 {{=msg}}
