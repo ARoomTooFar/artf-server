@@ -141,13 +141,17 @@ def workshop():
 
         # /workshop/zones/add
         elif request.args(1) == 'add':
-            btnLevels = A('Your Zones', _class='btn', _href=URL('default', 'workshop', args=['zones']))
+            response.view = request.controller + '/zoneadd.html'
+            page_title = 'Create Zone'
+
             form = FORM.confirm('Do you want to create a new level?')
 
             if form.accepted:
                 levelId = db.Level.insert(live_level_data='MapData Terrain Room rooms: Scenery Monster', draft_level_data='MapData Terrain Room rooms: Scenery Monster', game_acct_id=auth.user.game_acct_id, mach_id=123)
                 session.flash = T('New level ' + str(levelId) + ' created!')
                 redirect(URL('default', 'workshop', args=['zones']))
+
+            return dict(form=form)
 
         # /workshop/zones
         else:
