@@ -6,10 +6,20 @@
 
 <div>
 	<h1>{{=page_title}}</h1>
-	<a href="#" class="createbtn">+ CREATE ZONE</a>
+	<a href="/workshop/zones/add" class="createbtn">+ CREATE ZONE</a>
 </div>
 <ul class="zoneslist">
-	<li>
+	{{for level in levelsList:}}
+		<li>
+			<a href="/workshop/zones/{{=level['id']}}">
+				<div class="zonebtn">
+					<h2>{{=level["id"]}}</h2>
+					<p>Santa Cruz, CA</p>
+				</div>
+			</a>
+		</li>
+	{{pass}}
+	<!--<li>
 		<a href="/workshop/zones/5713573250596864">
 			<div class="zonebtn">
 				<h2>The Gauntlet</h2>
@@ -24,7 +34,7 @@
 				<p>Crown Dining Hall, Santa Cruz, CA</p>
 			</div>
 		</a>
-	</li>
+	</li>-->
 </ul>
 
 {{pass}}
