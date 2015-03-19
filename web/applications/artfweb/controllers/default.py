@@ -39,17 +39,12 @@ def editor():
     return dict(display_title='Level Editor', lvlId=lvlId)
 
 def media():
-
-
     return dict(display_title= 'Media')
 
 def locations():
-
-
     return dict(display_title= 'Locations')
 
 def blog():
-
     #form = SQLFORM(db.blog)
     #form.add_button('Add', URL('add'))
     posts = db().select(db.blog.ALL, orderby = ~db.blog.date_posted)
@@ -68,7 +63,6 @@ def add():
     )
 
     if form.process().accepted:
-
         db.blog.insert(**form.vars)
         response.flash = T('Announcement posted')
         redirect(URL('default','blog'))
