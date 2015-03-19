@@ -219,6 +219,9 @@ def api():
     """
     from gluon.contrib.hypermedia import Collection
     rules = {
-        '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
+        'blog': {
+        'GET':{'query':None,'fields':['id', 'authour']},
+        'POST':{},'PUT':{},'DELETE':{}},
+        '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}}
         }
     return Collection(db).process(request,response,rules)
