@@ -153,9 +153,9 @@
                 {{block footer}} <!-- this is default footer -->
                 <div class="copyright pull-left">{{=T('Copyright')}} &#169; {{=request.now.year}}</div>
                 <div id="poweredBy" class="pull-right">
-                    <a href="https://www.facebook.com/aroomtoofar"> <img src="/{{=response.title}}/static/images/fbk.png" width="24" height="24" alt"Facebook"> </a>
-                    <a href="https://twitter.com/aroomtoofar"> <img src="/{{=response.title}}/static/images/twt.png" width="24" height="24" alt"Twitter"> </a>
-                    <a href="https://www.youtube.com/channel/UCcHk6D1bCVpLdh8kgM9G4Fw"> <img src="/{{=response.title}}/static/images/ytb.png" width="24" height="24" alt"YouTube"> </a>
+                    {{=A(IMG(_src=URL('static','images/fbk.png'), _alt="Facebook", _width='24', _height='24'), _href='https://facebook.com/aroomtoofar')}}
+                    {{=A(IMG(_src=URL('static','images/twt.png'), _alt="Facebook", _width='24', _height='24'), _href='https://twitter.com/aroomtoofar')}}
+                    {{=A(IMG(_src=URL('static','images/ytb.png'), _alt="YouTube", _width='24', _height='24'), _href='https://youtube.com/channel/UCcHk6D1bCVpLdh8kgM9G4Fw')}}
                 </div>
                 {{end}}
             </div>
