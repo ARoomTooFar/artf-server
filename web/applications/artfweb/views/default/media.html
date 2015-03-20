@@ -18,23 +18,23 @@ p{color:white}
 
 <h3> Art Concepts </h3> 
 <div style="margin-bottom:5px">
-<a href="/{{=response.title}}/static/images/cablemaw.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/cablemaw.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/cablevine.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/cablevine.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/cacklebranch.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/cacklebranch.png" width="300" height="300"" alt="Characters"> </a>
+	{{=A(IMG(_src=URL('static','images/thumbnails/cablemaw.png')), _href=URL('static','images/cablemaw.jpg'))}}
+	{{=A(IMG(_src=URL('static','images/thumbnails/cablevine.png')), _href=URL('static','images/cablevine.jpg'))}}
+	{{=A(IMG(_src=URL('static','images/thumbnails/cacklebranch.png')), _href=URL('static','images/cacklebranch.jpg'))}}
 </div>
 <div style="margin-bottom:5px"> 
-<a href="/{{=response.title}}/static/images/delversduster.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/delversduster.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/delversduster2.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/delversduster2.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/foliantfodder.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/foliantfodder.png" width="300" height="300"" alt="Characters"> </a>
+	{{=A(IMG(_src=URL('static','images/thumbnails/delversduster.png')), _href=URL('static','images/delversduster.jpg'))}}
+	{{=A(IMG(_src=URL('static','images/thumbnails/delversduster2.png')), _href=URL('static','images/delversduster2.jpg'))}}
+	{{=A(IMG(_src=URL('static','images/thumbnails/foliantfodder.png')), _href=URL('static','images/foliantfodder.jpg'))}}
 </div>
 <div style="margin-bottom:5px">
-<a href="/{{=response.title}}/static/images/folianthive.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/folianthive.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/ingameconcept.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/ingameconcept.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/miragehologram.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/miragehologram.png" width="300" height="300"" alt="Characters"> </a>
+	{{=A(IMG(_src=URL('static','images/thumbnails/folianthive.png')), _href=URL('static','images/folianthive.jpg'))}}
+	{{=A(IMG(_src=URL('static','images/thumbnails/ingameconcept.png')), _href=URL('static','images/ingameconcept.jpg'))}}
+	{{=A(IMG(_src=URL('static','images/thumbnails/miragehologram.png')), _href=URL('static','images/miragehologram.jpg'))}}
 </div>
-<a href="/{{=response.title}}/static/images/miragephysical.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/miragephysical.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/smugglersjacket.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/smugglersjacket.png" width="300" height="300"" alt="Characters"> </a>
-<a href="/{{=response.title}}/static/images/titlebackground.jpg"> <img src="/{{=response.title}}/static/images/thumbnails/titlebackground.png" width="300" height="300"" alt="Characters"> </a>
+{{=A(IMG(_src=URL('static','images/thumbnails/miragephysical.png')), _href=URL('static','images/miragephysical.jpg'))}}
+{{=A(IMG(_src=URL('static','images/thumbnails/smugglersjacket.png')), _href=URL('static','images/smugglersjacket.jpg'))}}
+{{=A(IMG(_src=URL('static','images/thumbnails/titlebackground.png')), _href=URL('static','images/titlebackground.jpg'))}}
 
 {{if 'message' in globals():}}
 <h3>{{=message}}</h3>
