@@ -152,11 +152,11 @@ def workshop():
             ids = str(auth.user.game_acct_id) + ',' + request.args(1)
 
             # get level data for debugging purposes
-            """entity = db(db.Level.id == request.args(1)).select().first()
-            levelData = entity.live_level_data"""
+            entity = db(db.Level.id == request.args(1)).select().first()
+            levelData = entity.live_level_data
 
             response.view = request.controller + '/zoneeditor.html'
-            return dict(ids=ids)
+            return dict(ids=ids, levelData=levelData)
 
         # /workshop/zones/add
         elif request.args(1) == 'add':
