@@ -30,14 +30,6 @@ def index():
 
     return dict(inWorkshop=False)
 
-def editor():
-    if auth.user:
-        lvlId = '5715999101812736';
-    else:
-        lvlId = '0';
-
-    return dict(display_title='Level Editor', lvlId=lvlId)
-
 def media():
     return dict(display_title= 'Media')
 
