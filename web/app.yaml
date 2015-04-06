@@ -36,6 +36,10 @@ handlers:
   static_files: applications/welcome/static/favicon.ico
   upload: applications/welcome/static/favicon.ico
 
+- url: /crossdomain\.xml
+  static_files: staticroot/crossdomain.xml
+  upload: staticroot/crossdomain.xml
+
 - url: /robots.txt
   static_files: applications/welcome/static/robots.txt
   upload: applications/welcome/static/robots.txt
