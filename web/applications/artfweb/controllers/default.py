@@ -94,6 +94,10 @@ def dbinput():
 def webgl():
     return dict()
 
+def api():
+    data = "testttt"
+    return dict(data=data)
+
 @auth.requires_login()
 def workshop():
     btnLevels = None
@@ -194,7 +198,6 @@ def download():
     """
     return response.download(request, db)
 
-
 def call():
     """
     exposes services. for example:
@@ -204,13 +207,12 @@ def call():
     """
     return service()
 
-
-@auth.requires_login() 
+"""@auth.requires_login() 
 def api():
-    """
-    this is example of API with access control
-    WEB2PY provides Hypermedia API (Collection+JSON) Experimental
-    """
+
+    #this is example of API with access control
+    #WEB2PY provides Hypermedia API (Collection+JSON) Experimental
+
     from gluon.contrib.hypermedia import Collection
     rules = {
         'blog': {
@@ -218,4 +220,4 @@ def api():
         'POST':{},'PUT':{},'DELETE':{}},
         '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}}
         }
-    return Collection(db).process(request,response,rules)
+    return Collection(db).process(request,response,rules)"""
