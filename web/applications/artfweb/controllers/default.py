@@ -95,7 +95,23 @@ def webgl():
     return dict()
 
 def api():
-    data = "testttt"
+    data = ''
+
+    if request.args(0) is not None:
+        if request.args(0) == 'levels':
+
+            # /levels
+            if request.args(1) is None:
+                data = 'levelzz'
+
+            # /levels/[LEVELID]
+            elif request.args(1).isdigit():
+                entity = db(db.Level.id == request.args(1)).select().first()
+
+                # if the level exists in the data store, print its data
+                if entity is not None:
+                    data = entity.live_level_data
+
     return dict(data=data)
 
 @auth.requires_login()
