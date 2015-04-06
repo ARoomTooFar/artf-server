@@ -97,20 +97,25 @@ def webgl():
 def api():
     data = ''
 
-    if request.args(0) is not None:
-        if request.args(0) == 'levels':
+    if request.args(0) == 'levels':
+        if request.args(1) != None:
+            if request.args(1).isdigit():
+                # download level
+                if(request.env.request_method == 'GET'):
+                    entity = db(db.Level.id == request.args(1)).select().first()
 
-            # /levels
-            if request.args(1) is None:
-                data = 'levelzz'
+                    # if the level exists in the data store, print its data
+                    if entity is not None:
+                        data = entity.live_level_data
 
-            # /levels/[LEVELID]
-            elif request.args(1).isdigit():
-                entity = db(db.Level.id == request.args(1)).select().first()
+                # update level
+                elif(request.env.request_method == 'POST'):
+                    entity = db(db.Level.id == request.args(1)).select().first()
 
-                # if the level exists in the data store, print its data
-                if entity is not None:
-                    data = entity.live_level_data
+                    # if the level exists in the data store, update its data
+                    if entity is not None:
+                        entity.update_record(draft_level_data = request.post_vars['draft_level_data'], game_acct_id = request.post_vars['game_acct_id'], live_level_data = request.post_vars['live_level_data'], modified = datetime.utcnow())
+                        data = request.post_vars['live_level_data']
 
     return dict(data=data)
 
