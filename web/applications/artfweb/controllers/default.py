@@ -83,9 +83,6 @@ def dbinput():
 
     return dict(display_title='DB Input', form=form)
 
-def webgl():
-    return dict()
-
 def api():
     data = ''
 
@@ -125,6 +122,17 @@ def workshop():
         redirect(URL('default', 'workshop', args=['zones']))
     
     elif request.args(0) == 'zones':
+
+        # /workshop/zones/[LEVELID]/webgl
+        if str(request.args(1)).isdigit() and request.args(2) == 'webgl':
+            ids = str(auth.user.game_acct_id) + ',' + request.args(1)
+
+            # get level data for debugging purposes
+            entity = db(db.Level.id == request.args(1)).select().first()
+            levelData = entity.live_level_data
+
+            response.view = request.controller + '/zoneeditor-webgl.html'
+            return dict(ids=ids, levelData=levelData)
 
         # /workshop/zones/[LEVELID]/del
         if str(request.args(1)).isdigit() and request.args(2) == 'del':
