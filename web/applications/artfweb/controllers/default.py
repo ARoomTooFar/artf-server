@@ -12,6 +12,7 @@
 #from google.appengine.ext import db
 #from google.appengine.ext.db import GqlQuery
 #db = GQLDB()
+import logging
 
 def index():
     """
@@ -82,31 +83,6 @@ def dbinput():
         redirect(URL('default', 'dbinput'))
 
     return dict(display_title='DB Input', form=form)
-
-def api():
-    data = ''
-
-    if request.args(0) == 'levels':
-        if request.args(1) != None:
-            if request.args(1).isdigit():
-                # download level
-                if(request.env.request_method == 'GET'):
-                    entity = db(db.Level.id == request.args(1)).select().first()
-
-                    # if the level exists in the data store, print its data
-                    if entity is not None:
-                        data = entity.live_level_data
-
-                # update level
-                elif(request.env.request_method == 'POST'):
-                    entity = db(db.Level.id == request.args(1)).select().first()
-
-                    # if the level exists in the data store, update its data
-                    if entity is not None:
-                        entity.update_record(draft_level_data = request.post_vars['draft_level_data'], game_acct_id = request.post_vars['game_acct_id'], live_level_data = request.post_vars['live_level_data'], modified = datetime.utcnow())
-                        data = request.post_vars['live_level_data']
-
-    return dict(data=data)
 
 @auth.requires_login()
 def workshop():
@@ -227,6 +203,39 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+def api():
+    data = 'error'
+
+    if request.args(0) == 'levels':
+        if request.args(1) != None:
+            if request.args(1).isdigit():
+                level_id = request.args(1)
+
+                # download level
+                if(request.env.request_method == 'GET'):
+                    entity = db(db.Level.id == level_id).select().first()
+
+                    # if the level exists in the data store, print its data
+                    if entity is not None:
+                        data = entity.live_level_data
+                        logging.info('Level ' + level_id  + ' downloaded')
+                    else:
+                        logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
+
+                # update level
+                elif(request.env.request_method == 'POST'):
+                    entity = db(db.Level.id == request.args(1)).select().first()
+
+                    # if the level exists in the data store, update its data
+                    if entity is not None:
+                        entity.update_record(draft_level_data = request.post_vars['draft_level_data'], game_acct_id = request.post_vars['game_acct_id'], live_level_data = request.post_vars['live_level_data'], modified = datetime.utcnow())
+                        data = request.post_vars['live_level_data']
+                        logging.info('Level ' + level_id + ' updated')
+                    else:
+                        logging.error('Level manipulation failed. No manipulation flag set.')
+
+    return dict(data=data)
 
 """@auth.requires_login() 
 def api():
