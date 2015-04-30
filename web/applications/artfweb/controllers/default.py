@@ -207,33 +207,48 @@ def call():
 def api():
     data = 'error'
 
+    # /api/levels
     if request.args(0) == 'levels':
-        if request.args(1) != None:
-            if request.args(1).isdigit():
-                level_id = request.args(1)
+        if request.args(1) != None and request.args(1).isdigit():
+            level_id = request.args(1)
 
-                # download level
-                if(request.env.request_method == 'GET'):
-                    entity = db(db.Level.id == level_id).select().first()
+            # download level (/api/levels/[LEVELID])
+            if(request.env.request_method == 'GET'):
+                entity = db(db.Level.id == level_id).select().first()
 
-                    # if the level exists in the data store, print its data
-                    if entity is not None:
-                        data = entity.live_level_data
-                        logging.info('Level ' + level_id  + ' downloaded')
-                    else:
-                        logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
+                # if the level exists in the data store, print its data
+                if entity is not None:
+                    data = entity.live_level_data
+                    logging.info('Level ' + level_id  + ' downloaded')
+                else:
+                    logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
 
-                # update level
-                elif(request.env.request_method == 'POST'):
-                    entity = db(db.Level.id == request.args(1)).select().first()
+            # update level (/api/levels/[LEVELID])
+            elif(request.env.request_method == 'POST'):
+                entity = db(db.Level.id == level_id).select().first()
 
-                    # if the level exists in the data store, update its data
-                    if entity is not None:
-                        entity.update_record(draft_level_data = request.post_vars['draft_level_data'], game_acct_id = request.post_vars['game_acct_id'], live_level_data = request.post_vars['live_level_data'], modified = datetime.utcnow())
-                        data = request.post_vars['live_level_data']
-                        logging.info('Level ' + level_id + ' updated')
-                    else:
-                        logging.error('Level manipulation failed. No manipulation flag set.')
+                # if the level exists in the data store, update its data
+                if entity is not None:
+                    entity.update_record(draft_level_data = request.post_vars['draft_level_data'], game_acct_id = request.post_vars['game_acct_id'], live_level_data = request.post_vars['live_level_data'], modified = datetime.utcnow())
+                    data = request.post_vars['live_level_data']
+                    logging.info('Level ' + level_id + ' updated')
+                else:
+                    logging.error('Level manipulation failed. No manipulation flag set.')
+
+    # /api/gameaccounts
+    elif request.args(0) == 'gameaccts':
+        if (request.env.request_method == 'POST'):
+            
+            # register (/api/gameaccts)
+            if request.args(1) is None:
+                # register handling goes here
+                logging.info('register')
+
+        # login (/api/gameaccts/[GAMEACCTID])
+        elif request.args(1) != None and request.args(1).isdigit():
+            gameacct_id = request.args(1)
+            data = game_acct_id
+            #entity = db(db.gameacct_id.id == game_acct_id).select().first()
 
     return dict(data=data)
 
