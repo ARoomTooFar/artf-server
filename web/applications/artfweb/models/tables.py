@@ -17,6 +17,13 @@ db.define_table('GameAccount',
     Field('modified', 'datetime')
 )
 
+db.define_table('Character',
+    Field('char_data', 'text'),
+    Field('game_acct_id', 'bigint'),
+    Field('created', 'datetime'),
+    Field('modified', 'datetime')
+)
+
 db.define_table('blog',
 	Field('post_title', 'string'),
 	Field('authour', 'string'),
@@ -36,3 +43,9 @@ db.GameAccount.created.default = datetime.utcnow()
 db.GameAccount.created.writable = False
 db.GameAccount.modified.default = datetime.utcnow()
 db.GameAccount.modified.writable = False
+
+db.Character.game_acct_id.required = True
+db.Character.created.default = datetime.utcnow()
+db.Character.created.writable = False
+db.Character.modified.default = datetime.utcnow()
+db.Character.modified.writable = False

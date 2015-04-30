@@ -251,12 +251,20 @@ def api():
 
                 entity = db(db.GameAccount.game_acct_name == input_game_acct_name).select().first()
                 
+                # continue if game_acct_name exists
                 if entity is not None:
+                    game_acct_id = entity.id
+
+                    # send char_data if game_acct_name and game_acct_pass are correct
                     if entity.game_acct_password == input_game_acct_pass:
-                        data = input_game_acct_name + ',' + input_game_acct_pass
+                        entity = db(db.Character.game_acct_id == game_acct_id).select().first()
+                        data = entity.char_data
                         logging.info('Game account ' + input_game_acct_name + ' logged in')
+                    # send error if game_acct_name or game_acct_pass are incorrect
                     else:
                         logging.info('Login failed for game account ' + input_game_acct_name + '. Password incorrect.')
+                
+                # send error if game_acct_name doesn't exist
                 else:
                     logging.info('Login failed for game account ' + input_game_acct_name + '. game_acct_name doesn\'t exist.')
 
