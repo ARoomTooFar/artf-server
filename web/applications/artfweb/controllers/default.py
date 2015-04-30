@@ -244,11 +244,12 @@ def api():
                 # register handling goes here
                 logging.info('register')
 
-        # login (/api/gameaccts/[GAMEACCTID])
-        elif request.args(1) != None and request.args(1).isdigit():
-            gameacct_id = request.args(1)
-            data = game_acct_id
-            #entity = db(db.gameacct_id.id == game_acct_id).select().first()
+            # login (/api/gameaccts/login)
+            elif request.args(1) == 'login':
+                gameacct_id = request.args(1)
+                logging.info('login')
+                data = 'received'
+                #entity = db(db.gameacct_id.id == game_acct_id).select().first()
 
     return dict(data=data)
 
