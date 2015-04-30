@@ -246,10 +246,19 @@ def api():
 
             # login (/api/gameaccts/login)
             elif request.args(1) == 'login':
-                gameacct_id = request.args(1)
-                logging.info('login')
-                data = 'received'
-                #entity = db(db.gameacct_id.id == game_acct_id).select().first()
+                input_game_acct_name = request.post_vars['game_acct_name']
+                input_game_acct_pass = request.post_vars['game_acct_password']
+
+                entity = db(db.GameAccount.game_acct_name == input_game_acct_name).select().first()
+                
+                if entity is not None:
+                    if entity.game_acct_password == input_game_acct_pass:
+                        data = input_game_acct_name + ',' + input_game_acct_pass
+                        logging.info('Game account ' + input_game_acct_name + ' logged in')
+                    else:
+                        logging.info('Login failed for game account ' + input_game_acct_name + '. Password incorrect.')
+                else:
+                    logging.info('Login failed for game account ' + input_game_acct_name + '. game_acct_name doesn\'t exist.')
 
     return dict(data=data)
 

@@ -9,7 +9,7 @@ db.define_table('Level',
     Field('modified', 'datetime')
 )
 
-db.define_table('GameAcct',
+db.define_table('GameAccount',
     Field('game_acct_name', 'string'),
     Field('game_acct_password', 'string'),
     Field('web_acct_id', 'bigint'),
@@ -30,9 +30,9 @@ db.Level.created.writable = False
 db.Level.modified.default = datetime.utcnow()
 db.Level.modified.writable = False
 
-db.GameAcct.game_acct_name.required = True
-db.GameAcct.game_acct_password.required = True
-db.GameAcct.created.default = datetime.utcnow()
-db.GameAcct.created.writable = False
-db.GameAcct.modified.default = datetime.utcnow()
-db.GameAcct.modified.writable = False
+db.GameAccount.game_acct_name.required = True
+db.GameAccount.game_acct_password.required = True
+db.GameAccount.created.default = datetime.utcnow()
+db.GameAccount.created.writable = False
+db.GameAccount.modified.default = datetime.utcnow()
+db.GameAccount.modified.writable = False
