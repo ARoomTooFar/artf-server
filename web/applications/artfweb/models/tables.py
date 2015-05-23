@@ -3,6 +3,7 @@ from datetime import datetime
 db.define_table('Level',
     Field('live_level_data', 'text'),
     Field('draft_level_data', 'text'),
+    Field('difficulty', 'double'),
     Field('game_acct_id', 'bigint'),
     Field('mach_id', 'bigint'),
     Field('created', 'datetime'),

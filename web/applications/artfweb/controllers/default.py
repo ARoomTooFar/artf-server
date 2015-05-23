@@ -142,7 +142,7 @@ def workshop():
             form = FORM.confirm('Do you want to create a new level?')
 
             if form.accepted:
-                levelId = db.Level.insert(live_level_data='farts', draft_level_data='farts', game_acct_id=auth.user.game_acct_id, mach_id=123)
+                levelId = db.Level.insert(live_level_data='farts', draft_level_data='farts', difficulty='0', game_acct_id=auth.user.game_acct_id, mach_id=123)
                 session.flash = T('New level ' + str(levelId) + ' created!')
                 redirect(URL('default', 'workshop', args=['zones']))
 
@@ -267,6 +267,20 @@ def api():
                 # send error if game_acct_name doesn't exist
                 else:
                     logging.info('Login failed for game account ' + input_game_acct_name + '. game_acct_name doesn\'t exist.')
+
+    # /api/matchmake
+    elif request.args(0) == 'matchmake':
+
+        # get levels for difficulty (/api/matchmake/[DIFFICULTYVAL])
+        if request.args(1) != None and request.args(1).isdigit():
+            difficulty = request.args(1)
+            entities = db(db.Level.difficulty == difficulty).select()
+
+            if entities is not None:
+                data = ''
+                for entity in entities:
+                    data += str(entity.id) + ','
+                    #logging.info('Level ' + level_id  + ' downloaded')
 
     return dict(data=data)
 
