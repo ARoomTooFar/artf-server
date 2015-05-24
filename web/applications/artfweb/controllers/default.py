@@ -278,9 +278,13 @@ def api():
 
             if entities is not None:
                 data = ''
+
                 for entity in entities:
-                    data += str(entity.id) + ','
-                    #logging.info('Level ' + level_id  + ' downloaded')
+                    data += str(entity.id)
+
+                    if entity != entities[-1]:
+                        data += ','
+                    logging.info('Matchmaking for difficulty ' + difficulty  + ' executed')
 
     return dict(data=data)
 
