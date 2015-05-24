@@ -271,13 +271,14 @@ def api():
 
     # /api/matchmake
     elif request.args(0) == 'matchmake':
+        levelListLen = 10
 
         # get levels for difficulty (/api/matchmake/[DIFFICULTYVAL])
         if request.args(1) != None and request.args(1).isdigit():
             difficulty = int(request.args(1))
             difficultyCeil = difficulty + 1
             query = (db.Level.difficulty >= difficulty) & (db.Level.difficulty < difficultyCeil)
-            entities = db(query).select().sort(lambda row: random.random())[0:10]
+            entities = db(query).select().sort(lambda row: random.random())[0:levelListLen]
 
             if entities is not None:
                 data = ''
@@ -293,6 +294,25 @@ def api():
                     logging.info('Matchmaking for difficulty ' + str(difficulty)  + ' executed, but no levels exist in this difficulty range')
                 else:
                     logging.info('Matchmaking for difficulty ' + str(difficulty)  + ' successfully executed')
+
+        # get levels at random (/api/matchmake/rand)
+        elif request.args(1) == 'rand':
+            entities = db().select(db.Level.ALL).sort(lambda row: random.random())[0:levelListLen]
+
+            if entities is not None:
+                data = ''
+
+                for entity in entities:
+                    data += str(entity.id)
+
+                    if entity != entities[-1]:
+                        data += ','
+
+                    if data == '':
+                        data = 'error'
+                        logging.info('Matchmaking for random executed, but no levels exist in this difficulty range')
+                    else:
+                        logging.info('Matchmaking for random successfully executed')
 
     return dict(data=data)
 
