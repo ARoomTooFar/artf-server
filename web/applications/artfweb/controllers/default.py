@@ -13,6 +13,7 @@
 #from google.appengine.ext.db import GqlQuery
 #db = GQLDB()
 import logging
+import random
 
 def index():
     """
@@ -273,8 +274,10 @@ def api():
 
         # get levels for difficulty (/api/matchmake/[DIFFICULTYVAL])
         if request.args(1) != None and request.args(1).isdigit():
-            difficulty = request.args(1)
-            entities = db(db.Level.difficulty == difficulty).select()
+            difficulty = int(request.args(1))
+            difficultyCeil = difficulty + 1
+            query = (db.Level.difficulty >= difficulty) & (db.Level.difficulty < difficultyCeil)
+            entities = db(query).select().sort(lambda row: random.random())[0:10]
 
             if entities is not None:
                 data = ''
@@ -284,7 +287,12 @@ def api():
 
                     if entity != entities[-1]:
                         data += ','
-                    logging.info('Matchmaking for difficulty ' + difficulty  + ' executed')
+
+                if data == '':
+                    data = 'error'
+                    logging.info('Matchmaking for difficulty ' + str(difficulty)  + ' executed, but no levels exist in this difficulty range')
+                else:
+                    logging.info('Matchmaking for difficulty ' + str(difficulty)  + ' successfully executed')
 
     return dict(data=data)
 
