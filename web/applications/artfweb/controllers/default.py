@@ -87,6 +87,22 @@ def dbinput():
 
 @auth.requires_login()
 def workshop():
+    # returns parsed data from level data. index 0 is level name, index 1 is difficulty.
+    def parseLevelData(levelData):
+        parsedData = []
+
+        if levelData == 'farts':
+            parsedData.append('Untitled Zone')
+            parsedData.append('0')
+        else:
+            firstLine = levelData.split('\n')[0]
+            parsedData = firstLine.split('\t')
+            parsedData[0] = parsedData[0][5:]
+            if parsedData[0] == '':
+                parsedData[0] = 'Untitled Zone'
+
+        return parsedData
+
     btnLevels = None
     btnAddLevel = None
     levelsList = None
@@ -131,9 +147,10 @@ def workshop():
             # get level data for debugging purposes
             entity = db(db.Level.id == request.args(1)).select().first()
             levelData = entity.live_level_data
+            parsedData = parseLevelData(entity.live_level_data)
 
             response.view = request.controller + '/zoneeditor.html'
-            return dict(ids=ids, levelData=levelData)
+            return dict(ids=ids, levelData=levelData, levelName = parsedData[0], difficulty = parsedData[1])
 
         # /workshop/zones/add
         elif request.args(1) == 'add':
@@ -159,7 +176,8 @@ def workshop():
             levelsList = []
 
             for entity in query:
-                levelsList.append({'id': entity.id, 'live_level_data': entity.live_level_data})
+                parsedData = parseLevelData(entity.live_level_data)
+                levelsList.append({'id': entity.id, 'live_level_data': entity.live_level_data, 'level_name': parsedData[0], 'difficulty': parsedData[1]})
 
             return dict(levelsList=levelsList)
 
