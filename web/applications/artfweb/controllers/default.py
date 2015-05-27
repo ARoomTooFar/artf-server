@@ -237,7 +237,7 @@ def api():
 
                 # if the level exists in the data store, print its data
                 if entity is not None:
-                    data = entity.live_level_data
+                    data = XML(entity.live_level_data)
                     logging.info('Level ' + level_id  + ' downloaded')
                 else:
                     logging.error('Level download failed. Level ' + level_id + ' does not exist in Datastore.')
