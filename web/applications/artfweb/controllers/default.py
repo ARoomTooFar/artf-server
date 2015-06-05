@@ -269,14 +269,10 @@ def api():
                 # if game_acct_name doesn't exist already
                 if entity is None:
                     # create game_acct
-                    db.GameAccount.insert(game_acct_name = input_game_acct_name, game_acct_password = input_game_acct_password)
-
-                    # get id of game_acct that was just inserted
-                    query = db().select(db.GameAccount.id)
-                    new_game_acct_id = query[len(query) - 1].id
+                    new_game_acct_id = db.GameAccount.insert(game_acct_name = input_game_acct_name, game_acct_password = input_game_acct_password)
 
                     # create character linked to game_acct
-                    db.Character.insert(char_data = "TestDummy,123,456,789,9001,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52", game_acct_id = new_game_acct_id)
+                    db.Character.insert(char_data = str(new_game_acct_id) + ",123,456,789,9001,1,0,3,0,5,0,7,0,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52", game_acct_id = new_game_acct_id)
 
                     #game_acct_id = str(game_acct_id)  # must be cast to str for logging
                     data = new_game_acct_id
