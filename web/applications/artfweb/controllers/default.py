@@ -224,6 +224,22 @@ def call():
     return service()
 
 def api():
+    # returns parsed data from level data. index 0 is level name, index 1 is difficulty.
+    def parseLevelData(levelData):
+        parsedData = []
+
+        if levelData == 'farts':
+            parsedData.append('Untitled Zone')
+            parsedData.append('0')
+        else:
+            firstLine = levelData.split('\n')[0]
+            parsedData = firstLine.split('\t')
+            parsedData[0] = parsedData[0][5:]
+            if parsedData[0] == '':
+                parsedData[0] = 'Untitled Zone'
+
+        return parsedData
+
     data = 'error'
 
     # /api/levels
@@ -280,8 +296,6 @@ def api():
                 else:
                     logging.info('Registration failed for ' + input_game_acct_name + '. game_acct_name already exists.')
 
-                #logging.info('register')
-
             # login (/api/gameaccts/login)
             elif request.args(1) == 'login':
                 input_game_acct_name = request.post_vars['game_acct_name']
@@ -321,7 +335,19 @@ def api():
                 data = ''
 
                 for entity in entities:
-                    data += str(entity.id)
+                    level_id = entity.id
+                    levelEntity = db(db.Level.id == level_id).select().first()
+
+                    level_data = levelEntity.live_level_data
+                    parsed_level_data parseLevelData(level_data)
+                    level_name = parsed_level_data[0]
+                    level_difficulty = parsed_level_data[1]
+                    level_owner_id = levelEntity.game_acct_id
+
+                    gameAcctEntity = db(db.GameAccount.game_acct_name == level_owner_id).select().first()
+                    level_owner_name = gameAcctEntity.game_acct_name
+
+                    data += str(level_id) # append level id
 
                     if entity != entities[-1]:
                         data += ','

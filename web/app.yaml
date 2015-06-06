@@ -4,7 +4,7 @@
 #  and http://web2py.com/book/default/chapter/11?search=app.yaml
 
 application: artf-server
-version: 0-0-9
+version: 0-0-10
 api_version: 1
 
 # use these lines for Python 2.7
