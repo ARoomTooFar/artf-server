@@ -96,7 +96,7 @@
 /* CUSTOM STYLES START HERE */
 body {
   height: 100vh;
-  background: #32464d; /* Old browsers */
+  background: #c5c5c5 url("/static/images/bg.gif") repeat;
   font-family: 'Open Sans', sans-serif;
 }
 
