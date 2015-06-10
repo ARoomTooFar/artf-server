@@ -183,6 +183,9 @@ def workshop():
 
     return dict()
 
+def test():
+    return dict()
+
 def user():
     """
     exposes:
