@@ -339,16 +339,6 @@ def api():
 
                 for entity in entities:
                     level_id = entity.id
-                    """levelEntity = db(db.Level.id == level_id).select().first()
-
-                    level_data = levelEntity.live_level_data
-                    parsed_level_data parseLevelData(level_data)
-                    level_name = parsed_level_data[0]
-                    level_difficulty = parsed_level_data[1]
-                    level_owner_id = levelEntity.game_acct_id
-
-                    gameAcctEntity = db(db.GameAccount.game_acct_name == level_owner_id).select().first()
-                    level_owner_name = gameAcctEntity.game_acct_name"""
 
                     data += str(level_id) # append level id
 
@@ -369,7 +359,17 @@ def api():
                 data = ''
 
                 for entity in entities:
-                    data += str(entity.id)
+                    level_id = str(entity.id)
+                    levelEntity = db(db.Level.id == level_id).select().first()
+                    level_data = levelEntity.live_level_data
+                    parsed_level_data = parseLevelData(level_data)
+                    level_name = parsed_level_data[0]
+                    level_difficulty = parsed_level_data[1]
+                    level_owner_id = levelEntity.game_acct_id
+                    gameAcctEntity = db(db.GameAccount.id == level_owner_id).select().first()
+                    level_owner_name = gameAcctEntity.game_acct_name
+
+                    data = data + level_id + '|' + level_name + '|' + level_owner_name + '|' + level_difficulty
 
                     if entity != entities[-1]:
                         data += ','
