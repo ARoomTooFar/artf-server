@@ -367,7 +367,10 @@ def api():
                     level_difficulty = parsed_level_data[1]
                     level_owner_id = levelEntity.game_acct_id
                     gameAcctEntity = db(db.GameAccount.id == level_owner_id).select().first()
-                    level_owner_name = gameAcctEntity.game_acct_name
+                    if gameAcctEntity is None:
+                        level_owner_name = 'Nosmik'
+                    else:
+                        level_owner_name = gameAcctEntity.game_acct_name
 
                     data = data + level_id + '|' + level_name + '|' + level_owner_name + '|' + level_difficulty
 
